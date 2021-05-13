@@ -244,3 +244,4 @@ dist
 # Local files
 .vscode/
 __debug_bin
+database.db*
