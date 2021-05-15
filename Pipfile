@@ -5,8 +5,11 @@ name = "pypi"
 
 [packages]
 fastapi = "*"
-uvicorn = {extras = ["standard"], version = "*"}
+uvicorn = "*"
 peewee = "*"
+python-jose = "*"
+passlib = "*"
+python-multipart = "*"
 
 [dev-packages]
 flake8 = "*"

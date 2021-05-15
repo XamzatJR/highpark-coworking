@@ -34,6 +34,11 @@ class User(BaseModel):
     email = CharField(unique=True)
     phone = CharField(unique=True)
     password = CharField()
+    is_active = BooleanField(default=False)
+
+    @classmethod
+    def get_by_email(cls, email):
+        return cls.get_or_none(email=email)
 
 
 class Place(BaseModel):
