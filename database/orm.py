@@ -35,6 +35,10 @@ class User(BaseModel):
     phone = CharField(unique=True)
     password = CharField()
 
+    @classmethod
+    def get_by_email(cls, email):
+        return cls.get_or_none(email=email)
+
 
 class Place(BaseModel):
     user = ForeignKeyField(User, on_delete="CASCADE")

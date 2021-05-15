@@ -68,6 +68,13 @@ func main() {
 	router.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir(staticDir))))
 	router.HandleFunc("/", index)
 	router.HandleFunc("/login", login)
+	router.HandleFunc("/logout", func(w http.ResponseWriter, r *http.Request) {
+		c := http.Cookie{
+			Name:   "Authorization",
+			MaxAge: -1}
+		http.SetCookie(w, &c)
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+	})
 	router.PathPrefix("/api/").HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		cookie, err := r.Cookie("Authorization")
 		if err != nil {
