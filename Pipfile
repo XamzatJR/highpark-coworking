@@ -9,6 +9,7 @@ uvicorn = "*"
 peewee = "*"
 python-jose = "*"
 passlib = "*"
+python-multipart = "*"
 
 [dev-packages]
 flake8 = "*"
