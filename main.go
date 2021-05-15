@@ -51,25 +51,29 @@ func main() {
 	path := "/api/*catchall"
 
 	reverseProxy := httputil.NewSingleHostReverseProxy(origin)
-
-	reverseProxy.Director = func(req *http.Request) {
-		req.Header.Add("X-Forwarded-Host", req.Host)
-		req.Header.Add("X-Origin-Host", origin.Host)
-		req.URL.Scheme = origin.Scheme
-		req.URL.Host = origin.Host
+	reverseProxy.Director = func(r *http.Request) {
+		r.Header.Add("X-Forwarded-Host", r.Host)
+		r.Header.Add("X-Origin-Host", origin.Host)
+		r.URL.Scheme = origin.Scheme
+		r.URL.Host = origin.Host
 
 		wildcardIndex := strings.IndexAny(path, "*")
-		proxyPath := singleJoiningSlash(origin.Path, req.URL.Path[wildcardIndex:])
+		proxyPath := singleJoiningSlash(origin.Path, r.URL.Path[wildcardIndex:])
 		if strings.HasSuffix(proxyPath, "/") && len(proxyPath) > 1 {
 			proxyPath = proxyPath[:len(proxyPath)-1]
 		}
-		req.URL.Path = proxyPath
+		r.URL.Path = proxyPath
 	}
 
 	router.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir(staticDir))))
 	router.HandleFunc("/", index)
 	router.HandleFunc("/login", login)
 	router.PathPrefix("/api/").HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		cookie, err := r.Cookie("Authorization")
+		if err == nil {
+			return
+		}
+		r.Header.Add(cookie.Name, cookie.Value)
 		reverseProxy.ServeHTTP(w, r)
 	})
 
