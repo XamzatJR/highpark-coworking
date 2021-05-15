@@ -70,7 +70,8 @@ func main() {
 	router.HandleFunc("/login", login)
 	router.PathPrefix("/api/").HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		cookie, err := r.Cookie("Authorization")
-		if err == nil {
+		if err != nil {
+			reverseProxy.ServeHTTP(w, r)
 			return
 		}
 		r.Header.Add(cookie.Name, cookie.Value)
