@@ -9,7 +9,7 @@ from peewee import (
     IntegerField,
     Model,
     SqliteDatabase,
-    PrimaryKeyField
+    PrimaryKeyField,
 )
 
 database = SqliteDatabase(

@@ -1,18 +1,20 @@
 from datetime import datetime, timedelta
-from os import environ
 
-from database.orm import User
+from orm import User
 from fastapi import HTTPException, status
 from fastapi.params import Depends
 from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
 from passlib.context import CryptContext
+from setting import settings
 
-SECRET_KEY = environ.get("SECRET_KEY", "uwillneverguess")
-ALGORITHM = "HS256"
+from .models import LoginModel
+
+SECRET_KEY = settings().secret_key
+ALGORITHM = settings().jwt_algorithm
 ACCESS_TOKEN_EXPIRE_MINUTES = datetime.now() + timedelta(minutes=60)
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+pwd_context = CryptContext(schemes=[settings().algorithm], deprecated="auto")
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/token")
 
@@ -46,6 +48,21 @@ def create_access_token(data: dict) -> str:
     to_encode.update({"exp": expire})
     token = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return token
+
+
+def check_user(user_model: LoginModel, user: User):
+    http_auth_error = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Incorrect username or password",
+        headers={"Authenticate": "Bearer"},
+    )
+    if user is None:
+        raise http_auth_error
+    if check_password(user_model.password, user.password) is False:
+        raise http_auth_error
+    if user.is_active is False:
+        http_auth_error.detail = "User not active"
+        raise http_auth_error
 
 
 def encrypt_password(password: str) -> str:
