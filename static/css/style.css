@@ -6,10 +6,10 @@ body {
 
 .hero {
   width: 100%;
-  height: auto;
+  height: 100%;
 
   background: #eeeff1;
-  
+
   padding-top: 10vh;
   padding-bottom: 15vh;
 }
@@ -19,13 +19,23 @@ body {
   height: 4em;
 
   text-align: center;
-  
+
   border: 0ch;
   border-radius: 0%;
 
   background: #34547a;
 }
 
-.order-btn:hover {
+.order-btn:hover, .order-btn:focus {
   background: #263c58;
+}
+
+.footer-custom {
+  color: white;
+
+  background: #34547a;
+}
+
+.footer-logo {
+    padding: 1em;
 }
