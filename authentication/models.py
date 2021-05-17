@@ -27,7 +27,9 @@ class RegisterModel(BaseModel):
     def phone_validator(cls, phone: str):
         for el in punctuation + whitespace:
             phone = phone.replace(el, "")
-        if not re.match(r"(8|\+7)(\d{3})(\d{7})", phone):
+        if not phone.isdigit():
+            raise ValidationError("Phone number not valid")
+        if not re.match(r"(8|7)(\d{3})(\d{7})", phone):
             raise ValidationError("Phone number not valid")
         return phone
 

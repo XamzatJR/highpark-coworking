@@ -7,8 +7,8 @@ name = "pypi"
 fastapi = "*"
 uvicorn = "*"
 peewee = "*"
-python-jose = "*"
-passlib = "*"
+python-jose = {extras = ["cryptography"], version = "*"}
+passlib = {extras = ["bcrypt"], version = "*"}
 python-multipart = "*"
 
 [dev-packages]

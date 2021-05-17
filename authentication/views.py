@@ -2,7 +2,6 @@ from fastapi.param_functions import Depends
 from database.orm import User
 from fastapi import APIRouter, HTTPException, status
 from fastapi.responses import JSONResponse
-from fastapi.security import OAuth2PasswordRequestForm
 from starlette.requests import Request
 
 from .models import LoginModel, RegisterModel, Token
@@ -11,10 +10,9 @@ from .utils import (
     check_password,
     create_access_token,
     encrypt_password,
-    get_current_user,
 )
 
-router = APIRouter(prefix="/auth")
+router = APIRouter(prefix="/auth", tags=["Auth"])
 
 
 @router.post("/token", response_model=Token)
@@ -75,8 +73,3 @@ def logout(request: Request):
     response = JSONResponse()
     response.delete_cookie("Authorization", domain=request.base_url.hostname)
     return response
-
-
-@router.get("/sayhi")
-def sayhi(user: User = Depends(get_current_user)):
-    return {"email": user.email}
