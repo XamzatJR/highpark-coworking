@@ -3,6 +3,7 @@ from os import environ
 from fastapi import FastAPI
 
 from authentication.views import router as authentication
+from places.views import router as places
 
 DEBUG = bool(environ.get("DEBUG", True))
 
@@ -11,3 +12,4 @@ app = FastAPI(
 )
 
 app.include_router(authentication)
+app.include_router(places)
