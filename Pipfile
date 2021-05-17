@@ -10,6 +10,7 @@ peewee = "*"
 python-jose = {extras = ["cryptography"], version = "*"}
 passlib = {extras = ["bcrypt"], version = "*"}
 python-multipart = "*"
+python-dotenv = "*"
 
 [dev-packages]
 flake8 = "*"

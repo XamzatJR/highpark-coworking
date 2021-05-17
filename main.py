@@ -1,14 +1,15 @@
-from os import environ
+from setting import settings
 
 from fastapi import FastAPI
 
 from authentication.views import router as authentication
 from places.views import router as places
 
-DEBUG = bool(environ.get("DEBUG", True))
 
 app = FastAPI(
-    debug=DEBUG, docs_url="/docs" if DEBUG else "", redoc_url="/docs" if DEBUG else ""
+    debug=settings().debug,
+    docs_url="/docs" if settings().debug else "",
+    redoc_url="/docs" if settings().debug else "",
 )
 
 app.include_router(authentication)

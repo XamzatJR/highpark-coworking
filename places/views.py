@@ -1,4 +1,4 @@
-from database.orm import Place
+from orm import Place
 from fastapi import APIRouter
 from fastapi.param_functions import Depends
 
