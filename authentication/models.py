@@ -13,7 +13,7 @@ class RegisterModel(BaseModel):
 
     @validator("full_name")
     def full_name_validator(cls, name: str):
-        if " " not in name or len(name) < 3:
+        if " " not in name and len(name) < 3:
             raise ValidationError("must contain a space")
         return name.title()
 

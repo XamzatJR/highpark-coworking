@@ -9,6 +9,7 @@ from peewee import (
     IntegerField,
     Model,
     SqliteDatabase,
+    PrimaryKeyField
 )
 
 database = SqliteDatabase(
@@ -30,6 +31,7 @@ class BaseModel(Model):
 
 
 class User(BaseModel):
+    id = PrimaryKeyField()
     full_name = CharField()
     email = CharField(unique=True)
     phone = CharField(unique=True)
