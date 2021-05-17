@@ -10,8 +10,8 @@ body {
 
   background: #eeeff1;
 
-  padding-top: 10vh;
-  padding-bottom: 15vh;
+  padding-top: 18vh;
+  padding-bottom: 18vh;
 }
 
 .order-btn {
@@ -22,6 +22,8 @@ body {
 
   border: 0ch;
   border-radius: 0%;
+
+  padding-top: 1.3em;
 
   background: #34547a;
 }
