@@ -1,3 +1,31 @@
-.nav-link{
-    position: relative;
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap");
+
+body {
+  font-family: "Roboto", sans-serif;
+}
+
+.hero {
+  width: 100%;
+  height: auto;
+
+  background: #eeeff1;
+  
+  padding-top: 10vh;
+  padding-bottom: 15vh;
+}
+
+.order-btn {
+  width: 15em;
+  height: 4em;
+
+  text-align: center;
+  
+  border: 0ch;
+  border-radius: 0%;
+
+  background: #34547a;
+}
+
+.order-btn:hover {
+  background: #263c58;
 }
