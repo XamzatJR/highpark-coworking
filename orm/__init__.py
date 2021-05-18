@@ -1,4 +1,5 @@
 from datetime import date, datetime
+import sys
 
 from peewee import (
     BooleanField,
@@ -10,11 +11,22 @@ from peewee import (
     Model,
     SqliteDatabase,
     PrimaryKeyField,
+    Database,
 )
 
-database = SqliteDatabase(
-    "database.db", pragmas={"journal_mode": "wal", "cache_size": -1024 * 64}
-)
+
+def get_db() -> Database:
+    if sys.argv[0].split("\\")[-1] == "pytest":
+        return SqliteDatabase(
+            "test_database.db",
+            pragmas={"journal_mode": "wal", "cache_size": -1024 * 64},
+        )
+    return SqliteDatabase(
+        "database.db", pragmas={"journal_mode": "wal", "cache_size": -1024 * 64}
+    )
+
+
+database = get_db()
 
 
 class BaseModel(Model):
@@ -50,9 +62,10 @@ class Place(BaseModel):
     end = DateField(default=date.today())
 
 
-def create_tables():
-    with database:
-        database.create_tables(BaseModel.__subclasses__())
+def create_tables(database: Database = database, base_model: BaseModel = BaseModel):
+    with database as db:
+        db.create_tables(base_model.__subclasses__())
 
 
-create_tables()
+if __name__ == "__main__":
+    create_tables()

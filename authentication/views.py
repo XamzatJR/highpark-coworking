@@ -1,6 +1,5 @@
 from orm import User
 from fastapi import APIRouter, status
-from fastapi.param_functions import Depends
 from fastapi.responses import JSONResponse
 from starlette.requests import Request
 
@@ -16,7 +15,7 @@ router = APIRouter(prefix="/auth", tags=["Auth"])
 
 
 @router.post("/token", response_model=Token)
-def token(user_model: LoginModel = Depends()):
+def token(user_model: LoginModel):
     user = User.get_by_email(user_model.email)
     check_user(user_model, user)
     access_token = create_access_token({"email": user.email})
@@ -24,7 +23,7 @@ def token(user_model: LoginModel = Depends()):
 
 
 @router.post("/login")
-def login(request: Request, user_model: LoginModel = Depends()):
+def login(request: Request, user_model: LoginModel):
     user = User.get_by_email(user_model.email)
     check_user(user_model, user)
     access_token = create_access_token({"email": user.email})
@@ -40,10 +39,10 @@ def login(request: Request, user_model: LoginModel = Depends()):
 
 
 @router.post("/register")
-def register(user_model: RegisterModel = Depends()):
+async def register(user_model: RegisterModel):
     user_model.password = encrypt_password(user_model.password)
     User.create(**user_model.dict())
-    return JSONResponse(status_code=status.HTTP_201_CREATED)
+    return user_model
 
 
 @router.post("/logout")
