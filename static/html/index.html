@@ -24,34 +24,32 @@
             найдете самое современное компьютерное оборудование. К вашим услугам
             кухня, переговорные комнаты и копи-центр.</p>
           <div class="d-grid gap-2 d-md-flex justify-content-md-start">
-            <a class="btn btn-primary order-btn" href="#service">Заказать</a>
+            <a href="#service" class="btn btn-primary order-btn" id="displayService">Заказать</a>
           </div>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="hero" id="service">
+  <div class="hero hero-disabled" id="service">
     <div class="px-4 py-5 my-5 text-center">
       <h1 class="display-10 fw-bold lh-1 mb-3">Выберите услугу</h1>
       <div class="col-lg-6 mx-auto">
         <div class="d-grid gap-5 d-sm-flex justify-content-sm-center" style="margin-top: 20vh;">
-          <a href="#date" class="btn btn-primary order-btn">Арендовать на день</a>
-          <a href="#date" class="btn btn-primary order-btn">Арендовать на месяц</a>
+          <a href="#date" class="btn btn-primary order-btn" id="displayDateDaily" value="day">Арендовать на день</a>
+          <a href="#date" class="btn btn-primary order-btn" id="displayDateMonthly" value="month">Арендовать на
+            месяц</a>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="hero" id="date">
+  <div class="hero hero-disabled" id="date">
     <div class="px-4 py-5 my-5 text-center">
       <h1 class="display-10 fw-bold lh-1 mb-3">Выберите дату</h1>
       <div class="col-lg-6 mx-auto">
         <div class="d-grid gap-5 d-sm-flex justify-content-sm-center" style="margin-top: 20vh;">
-          <label for="dateStart" class="form-label">Начало</label>
-          <input type="text" id="dateStart" class="form-control">
-          <label for="dateEnd" class="form-label">Конец</label>
-          <input type="text" id="dateEnd" class="form-control">
+          <input type="text" id="daterange" name="daterange" class="form-control" />
         </div>
       </div>
     </div>
@@ -72,38 +70,12 @@
       </div>
     </div>
   </footer>
-
-  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-  <script>
-    $.datepicker.regional['ru'] = {
-      closeText: 'Закрыть',
-      prevText: 'Предыдущий',
-      nextText: 'Следующий',
-      currentText: 'Сегодня',
-      monthNames: ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'],
-      monthNamesShort: ['Янв','Фев','Мар','Апр','Май','Июн','Июл','Авг','Сен','Окт','Ноя','Дек'],
-      dayNames: ['воскресенье','понедельник','вторник','среда','четверг','пятница','суббота'],
-      dayNamesShort: ['вск','пнд','втр','срд','чтв','птн','сбт'],
-      dayNamesMin: ['Вс','Пн','Вт','Ср','Чт','Пт','Сб'],
-      weekHeader: 'Не',
-      dateFormat: 'dd.mm.yy',
-      firstDay: 1,
-      isRTL: false,
-      showMonthAfterYear: false,
-      yearSuffix: ''
-    };
-    $.datepicker.setDefaults($.datepicker.regional['ru']);
-    $(function () {
-      let date = new Date();
-      date.setDate(date.getDate() + 1);
-
-      $("#dateStart").datepicker({
-        minDate: date,
-        maxDate: "+30D"
-      });
-    });
-  </script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+  <script src="/static/javascript/datepicker.js"></script>
+  <script src="/static/javascript/index.js"></script>
 </body>
 
 </html>
