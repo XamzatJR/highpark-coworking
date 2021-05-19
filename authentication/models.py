@@ -11,6 +11,11 @@ class RegisterModel(BaseModel):
     phone: str
     password: str
 
+    def exclude_password(self):
+        model = self
+        delattr(model, "password")
+        return model
+
     @validator("full_name")
     def full_name_validator(cls, name: str):
         if " " not in name and len(name) < 3:
@@ -45,12 +50,12 @@ class LoginModel(BaseModel):
     password: str
 
 
-class Token(BaseModel):
+class TokenModel(BaseModel):
     access_token: str
     token_type: str
 
 
-class User(BaseModel):
+class UserModel(BaseModel):
     username: str
     email: Optional[str] = None
     full_name: Optional[str] = None

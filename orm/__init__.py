@@ -1,22 +1,23 @@
-from datetime import date, datetime
 import sys
+from datetime import date, datetime
 
 from peewee import (
     BooleanField,
     CharField,
+    Database,
     DateField,
     DateTimeField,
     ForeignKeyField,
     IntegerField,
     Model,
     SqliteDatabase,
-    PrimaryKeyField,
-    Database,
 )
 
 
 def get_db() -> Database:
-    if sys.argv[0].split("\\")[-1] == "pytest":
+    if sys.argv[0].split("\\")[-1] == "pytest" or (
+        len(sys.argv) > 1 and sys.argv[2] == "pytest"
+    ):
         return SqliteDatabase(
             "test_database.db",
             pragmas={"journal_mode": "wal", "cache_size": -1024 * 64},
@@ -43,7 +44,6 @@ class BaseModel(Model):
 
 
 class User(BaseModel):
-    id = PrimaryKeyField()
     full_name = CharField()
     email = CharField(unique=True)
     phone = CharField(unique=True)
@@ -64,6 +64,12 @@ class Place(BaseModel):
 
 def create_tables(database: Database = database, base_model: BaseModel = BaseModel):
     with database as db:
+        db.create_tables(base_model.__subclasses__())
+
+
+def drop_tables(database: Database = database, base_model: BaseModel = BaseModel):
+    with database as db:
+        db.drop_tables(base_model.__subclasses__())
         db.create_tables(base_model.__subclasses__())
 
 

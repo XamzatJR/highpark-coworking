@@ -1,9 +1,9 @@
-from orm import User
 from fastapi import APIRouter, status
 from fastapi.responses import JSONResponse
+from orm import User
 from starlette.requests import Request
 
-from .models import LoginModel, RegisterModel, Token
+from .models import LoginModel, RegisterModel, TokenModel
 from .utils import (
     ACCESS_TOKEN_EXPIRE_MINUTES,
     check_user,
@@ -14,7 +14,7 @@ from .utils import (
 router = APIRouter(prefix="/auth", tags=["Auth"])
 
 
-@router.post("/token", response_model=Token)
+@router.post("/token", response_model=TokenModel)
 def token(user_model: LoginModel):
     user = User.get_by_email(user_model.email)
     check_user(user_model, user)
@@ -27,7 +27,9 @@ def login(request: Request, user_model: LoginModel):
     user = User.get_by_email(user_model.email)
     check_user(user_model, user)
     access_token = create_access_token({"email": user.email})
-    response = JSONResponse(None, status.HTTP_200_OK)
+    response = JSONResponse(
+        None, status.HTTP_200_OK, {"Authorization": f"Bearer {access_token}"}
+    )
     response.set_cookie(
         "Authorization",
         value=f"Bearer {access_token}",
@@ -39,10 +41,10 @@ def login(request: Request, user_model: LoginModel):
 
 
 @router.post("/register")
-async def register(user_model: RegisterModel):
+def register(user_model: RegisterModel):
     user_model.password = encrypt_password(user_model.password)
     User.create(**user_model.dict())
-    return user_model
+    return user_model.exclude_password()
 
 
 @router.post("/logout")
