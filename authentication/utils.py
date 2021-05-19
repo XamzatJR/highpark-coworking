@@ -66,7 +66,7 @@ def check_user(user_model: LoginModel, user: User):
 
 
 def encrypt_password(password: str) -> str:
-    return pwd_context.encrypt(password)
+    return pwd_context.hash(password)
 
 
 def check_password(password: str, hashed: str) -> bool:
