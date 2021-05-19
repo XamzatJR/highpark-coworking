@@ -7,10 +7,12 @@ import (
 	"net/http"
 	"net/http/httputil"
 	"net/url"
+	"os"
 	"strings"
 	"time"
 
 	"github.com/gorilla/mux"
+	"github.com/joho/godotenv"
 )
 
 var staticDir = "./static"
@@ -44,10 +46,25 @@ func singleJoiningSlash(a, b string) string {
 	return a + b
 }
 
+func init() {
+	if err := godotenv.Load(); err != nil {
+		log.Println("No .env file found")
+	}
+}
+
 func main() {
 	router := mux.NewRouter()
 
-	origin, _ := url.Parse("http://localhost:8000/")
+	host := func() string {
+		val, ok := os.LookupEnv("api_host")
+		if !ok {
+			return "http://127.0.0.1:8000/"
+		}
+		return val
+	}
+
+	origin, _ := url.Parse(host())
+
 	path := "/api/*catchall"
 
 	reverseProxy := httputil.NewSingleHostReverseProxy(origin)
@@ -87,7 +104,7 @@ func main() {
 
 	server := &http.Server{
 		Handler:      router,
-		Addr:         "127.0.0.1:4000",
+		Addr:         ":4000",
 		WriteTimeout: 15 * time.Second,
 		ReadTimeout:  15 * time.Second,
 	}
