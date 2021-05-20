@@ -43,7 +43,9 @@ def login(request: Request, user_model: LoginModel):
 
 
 @router.post("/register")
-def register(request: Request, user_model: RegisterModel, background_tasks: BackgroundTasks):
+def register(
+    request: Request, user_model: RegisterModel, background_tasks: BackgroundTasks
+):
     user_model.password = encrypt_password(user_model.password)
     user = User.create(**user_model.dict())
     background_tasks.add_task(send_activation, request.base_url._url, user)
