@@ -1,5 +1,6 @@
-from fastapi import APIRouter, status
+from fastapi import APIRouter, BackgroundTasks, status
 from fastapi.responses import JSONResponse
+from mail import send_activation
 from orm import User
 from starlette.requests import Request
 
@@ -41,8 +42,9 @@ def login(request: Request, user_model: LoginModel):
 
 
 @router.post("/register")
-def register(user_model: RegisterModel):
+def register(user_model: RegisterModel, background_tasks: BackgroundTasks):
     user_model.password = encrypt_password(user_model.password)
+    background_tasks.add_task(send_activation, user_model)
     User.create(**user_model.dict())
     return user_model.exclude_password()
 

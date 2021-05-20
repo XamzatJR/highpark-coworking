@@ -1,10 +1,10 @@
 from datetime import datetime, timedelta
 
-from orm import User
 from fastapi import HTTPException, status
 from fastapi.params import Depends
 from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
+from orm import User
 from passlib.context import CryptContext
 from setting import settings
 
