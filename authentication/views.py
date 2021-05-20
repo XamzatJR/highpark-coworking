@@ -1,3 +1,4 @@
+from datetime import datetime
 from fastapi import APIRouter, BackgroundTasks, status
 from fastapi.responses import JSONResponse
 from mail import send_activation
@@ -42,11 +43,24 @@ def login(request: Request, user_model: LoginModel):
 
 
 @router.post("/register")
-def register(user_model: RegisterModel, background_tasks: BackgroundTasks):
+def register(request: Request, user_model: RegisterModel, background_tasks: BackgroundTasks):
     user_model.password = encrypt_password(user_model.password)
-    background_tasks.add_task(send_activation, user_model)
-    User.create(**user_model.dict())
+    user = User.create(**user_model.dict())
+    background_tasks.add_task(send_activation, request.base_url._url, user)
     return user_model.exclude_password()
+
+
+@router.get("/activate/")
+def activate_user(code: str):
+    user = User.get_by_code(code)
+    if not user:
+        return {"error": "Сan't find the user"}
+    if datetime.now() > user.expires:
+        return {"error": "Сode expired"}
+    user.is_active = True
+    user.code = None
+    user.save()
+    return {"message": "User has been activated"}
 
 
 @router.post("/logout")

@@ -1,6 +1,6 @@
+from orm import User
 import pathlib
 
-from authentication.models import RegisterModel
 from fastapi_mail import ConnectionConfig, FastMail, MessageSchema
 from setting import settings
 
@@ -16,11 +16,11 @@ conf = ConnectionConfig(
 fm = FastMail(conf)
 
 
-async def send_activation(user: RegisterModel):
+async def send_activation(url: str, user: User):
     with open(
         pathlib.Path(__file__).parent.joinpath("templates/verify.html"), encoding="utf8"
     ) as file:
-        html = file.read().format("https://www.google.com/")
+        html = file.read().format(url + "auth/activate?code=" + user.code)
     message = MessageSchema(
         subject="Подтвердите свой аккаунт",
         recipients=[user.email],
