@@ -4,11 +4,15 @@ from pydantic import BaseSettings
 
 
 class Settings(BaseSettings):
-    secret_key: str = "uwillneverguess"
     debug: bool = True
 
+    secret_key: str = "uwillneverguess"
     algorithm: str = "sha256_crypt"
     jwt_algorithm: str = "HS256"
+
+    email_username: str
+    email_from: str
+    email_password: str
 
     class Config:
         env_file = ".env"

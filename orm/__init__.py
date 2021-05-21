@@ -1,5 +1,7 @@
+import random
+import string
 import sys
-from datetime import date, datetime
+from datetime import datetime, timedelta
 
 from peewee import (
     BooleanField,
@@ -31,12 +33,18 @@ database = get_db()
 
 
 class BaseModel(Model):
-    created_at = DateTimeField(default=datetime.now())
-    updated_at = DateTimeField(default=datetime.now())
+    created_at = DateTimeField()
+    updated_at = DateTimeField()
     is_active = BooleanField(default=True)
 
     class Meta:
         database = database
+
+    @classmethod
+    def create(cls, **query):
+        query["created_at"] = datetime.now()
+        query["updated_at"] = datetime.now()
+        return super().create(**query)
 
     def save(self, force_insert=False, only=None):
         self.updated_at = datetime.now()
@@ -49,17 +57,31 @@ class User(BaseModel):
     phone = CharField(unique=True)
     password = CharField()
     is_active = BooleanField(default=False)
+    code = CharField(null=True)
+    expires = DateTimeField()
 
     @classmethod
-    def get_by_email(cls, email):
+    def create(cls, **query):
+        query["code"] = "".join(
+            random.choices(string.ascii_letters + string.digits, k=30)
+        )
+        query["expires"] = datetime.now() + timedelta(minutes=10)
+        return super().create(**query)
+
+    @classmethod
+    def get_by_email(cls, email: str):
         return cls.get_or_none(email=email)
+
+    @classmethod
+    def get_by_code(cls, code: str):
+        return cls.get_or_none(code=code, is_active=False)
 
 
 class Place(BaseModel):
     user = ForeignKeyField(User, on_delete="CASCADE")
     place = IntegerField()
-    start = DateField(default=date.today())
-    end = DateField(default=date.today())
+    start = DateField()
+    end = DateField()
 
 
 def create_tables(database: Database = database, base_model: BaseModel = BaseModel):
