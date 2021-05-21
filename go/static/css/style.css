@@ -1,3 +1,52 @@
-.nav-link{
-    position: relative;
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap");
+
+body {
+  font-family: "Roboto", sans-serif;
 }
+
+.hero {
+  width: 100%;
+  height: 100%;
+
+  background: #eeeff1;
+
+  padding-top: 18vh;
+  padding-bottom: 40vh;
+}
+
+.hero-disabled {
+  display: none;
+}
+
+.order-btn {
+  width: 15em;
+  height: 4em;
+
+  text-align: center;
+
+  border: 0ch;
+  border-radius: 0%;
+
+  padding-top: 1.3em;
+
+  background: #34547a;
+}
+
+.order-btn:hover,
+.order-btn:focus {
+  background: #263c58;
+}
+
+#daterange {
+  text-align: center;
+  font-size: 1.5em;
+}
+
+.footer-custom {
+  color: white;
+
+  background: #34547a;
+}
+
+.footer-logo {
+  padding: 1em;
