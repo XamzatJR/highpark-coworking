@@ -52,21 +52,21 @@ def register(
     return user_model.exclude_password()
 
 
-@router.get("/activate/")
+@router.get("/activate")
 def activate_user(code: str):
     user = User.get_by_code(code)
     if not user:
-        return {"error": "Сan't find the user"}
+        return JSONResponse({"error": "Сan't find the user"}, status.HTTP_204_NO_CONTENT)
     if datetime.now() > user.expires:
-        return {"error": "Сode expired"}
+        return JSONResponse({"error": "Сode expired"}, status.HTTP_204_NO_CONTENT)
     user.is_active = True
     user.code = None
     user.save()
-    return {"message": "User has been activated"}
+    return JSONResponse({"message": "User has been activated"}, status.HTTP_200_OK)
 
 
 @router.post("/logout")
 def logout(request: Request):
-    response = JSONResponse()
+    response = JSONResponse(headers={"Authorization": ""})
     response.delete_cookie("Authorization", domain=request.base_url.hostname)
     return response
