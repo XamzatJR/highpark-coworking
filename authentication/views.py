@@ -1,58 +1,37 @@
-from fastapi.param_functions import Depends
-from database.orm import User
-from fastapi import APIRouter, HTTPException, status
+from datetime import datetime
+from fastapi import APIRouter, BackgroundTasks, status
 from fastapi.responses import JSONResponse
-from fastapi.security import OAuth2PasswordRequestForm
+from mail import send_activation
+from orm import User
 from starlette.requests import Request
 
-from .models import LoginModel, RegisterModel, Token
+from .models import LoginModel, RegisterModel, TokenModel
 from .utils import (
     ACCESS_TOKEN_EXPIRE_MINUTES,
-    check_password,
+    check_user,
     create_access_token,
     encrypt_password,
-    get_current_user,
 )
 
-router = APIRouter(prefix="/auth")
+router = APIRouter(prefix="/auth", tags=["Auth"])
 
 
-@router.post("/token", response_model=Token)
-def token(user_model: LoginModel = Depends()):
+@router.post("/token", response_model=TokenModel)
+def token(user_model: LoginModel):
     user = User.get_by_email(user_model.email)
-    http_auth_error = HTTPException(
-        status_code=status.HTTP_401_UNAUTHORIZED,
-        detail="Incorrect username or password",
-        headers={"Authenticate": "Bearer"},
-    )
-    if not user:
-        raise http_auth_error
-    if (
-        check_password(user_model.password, user.password) is False
-        or user.is_active is False
-    ):
-        raise http_auth_error
+    check_user(user_model, user)
     access_token = create_access_token({"email": user.email})
     return {"access_token": access_token, "token_type": "bearer"}
 
 
 @router.post("/login")
-def login(request: Request, user_model: LoginModel = Depends()):
+def login(request: Request, user_model: LoginModel):
     user = User.get_by_email(user_model.email)
-    http_auth_error = HTTPException(
-        status_code=status.HTTP_401_UNAUTHORIZED,
-        detail="Incorrect username or password",
-        headers={"Authenticate": "Bearer"},
-    )
-    if user is None:
-        raise http_auth_error
-    if (
-        check_password(user_model.password, user.password) is False
-        or user.is_active is False
-    ):
-        raise http_auth_error
+    check_user(user_model, user)
     access_token = create_access_token({"email": user.email})
-    response = JSONResponse(None, status.HTTP_200_OK)
+    response = JSONResponse(
+        None, status.HTTP_200_OK, {"Authorization": f"Bearer {access_token}"}
+    )
     response.set_cookie(
         "Authorization",
         value=f"Bearer {access_token}",
@@ -64,19 +43,30 @@ def login(request: Request, user_model: LoginModel = Depends()):
 
 
 @router.post("/register")
-def register(user_model: RegisterModel = Depends()):
+def register(
+    request: Request, user_model: RegisterModel, background_tasks: BackgroundTasks
+):
     user_model.password = encrypt_password(user_model.password)
-    User.create(**user_model.dict())
-    return JSONResponse(status_code=status.HTTP_201_CREATED)
+    user = User.create(**user_model.dict())
+    background_tasks.add_task(send_activation, request.base_url._url, user)
+    return user_model.exclude_password()
+
+
+@router.get("/activate")
+def activate_user(code: str):
+    user = User.get_by_code(code)
+    if not user:
+        return JSONResponse({"error": "Сan't find the user"}, status.HTTP_204_NO_CONTENT)
+    if datetime.now() > user.expires:
+        return JSONResponse({"error": "Сode expired"}, status.HTTP_204_NO_CONTENT)
+    user.is_active = True
+    user.code = None
+    user.save()
+    return JSONResponse({"message": "User has been activated"}, status.HTTP_200_OK)
 
 
 @router.post("/logout")
 def logout(request: Request):
-    response = JSONResponse()
+    response = JSONResponse(headers={"Authorization": ""})
     response.delete_cookie("Authorization", domain=request.base_url.hostname)
     return response
-
-
-@router.get("/sayhi")
-def sayhi(user: User = Depends(get_current_user)):
-    return {"email": user.email}

@@ -7,13 +7,17 @@ name = "pypi"
 fastapi = "*"
 uvicorn = "*"
 peewee = "*"
-python-jose = "*"
-passlib = "*"
+python-jose = {extras = ["cryptography"], version = "*"}
+passlib = {extras = ["bcrypt"], version = "*"}
 python-multipart = "*"
+python-dotenv = "*"
+fastapi-mail = "*"
 
 [dev-packages]
 flake8 = "*"
 black = "*"
+pytest = "*"
+requests = "*"
 
 [requires]
 python_version = "3.9"

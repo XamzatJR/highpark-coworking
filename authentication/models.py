@@ -11,9 +11,14 @@ class RegisterModel(BaseModel):
     phone: str
     password: str
 
+    def exclude_password(self):
+        model = self
+        delattr(model, "password")
+        return model
+
     @validator("full_name")
     def full_name_validator(cls, name: str):
-        if " " not in name or len(name) < 3:
+        if " " not in name and len(name) < 3:
             raise ValidationError("must contain a space")
         return name.title()
 
@@ -27,7 +32,9 @@ class RegisterModel(BaseModel):
     def phone_validator(cls, phone: str):
         for el in punctuation + whitespace:
             phone = phone.replace(el, "")
-        if not re.match(r"(8|\+7)(\d{3})(\d{7})", phone):
+        if not phone.isdigit():
+            raise ValidationError("Phone number not valid")
+        if not re.match(r"(8|7)(\d{3})(\d{7})", phone):
             raise ValidationError("Phone number not valid")
         return phone
 
@@ -43,12 +50,12 @@ class LoginModel(BaseModel):
     password: str
 
 
-class Token(BaseModel):
+class TokenModel(BaseModel):
     access_token: str
     token_type: str
 
 
-class User(BaseModel):
+class UserModel(BaseModel):
     username: str
     email: Optional[str] = None
     full_name: Optional[str] = None
