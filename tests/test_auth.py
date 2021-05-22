@@ -33,9 +33,14 @@ def test_register():
     assert data["email"] == user_model.email
     assert data["phone"] == user_model.phone
 
-    user = User.get_by_id(1)
-    user.is_active = True
-    user.save()
+
+def test_activate_user():
+    user = User.get_by_email(user_model.email)
+    response = client.get(url="/auth/activate/", params={"code": user.code})
+    assert response.status_code == 200
+
+    user = User.get_by_email(user_model.email)
+    assert user.is_active is True
 
 
 def test_token():
@@ -55,3 +60,12 @@ def test_login():
 
     token = response.headers.get("authorization").split()[-1]
     assert jws.verify(token, SECRET_KEY, ALGORITHM)
+
+
+def test_logout():
+    auth_headers = client.post("/auth/login", user_model.json()).headers
+    response = client.post("/auth/logout", headers=auth_headers)
+    assert response.status_code == 200
+
+    token = response.headers.get("authorization")
+    assert token == ""
