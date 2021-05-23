@@ -55,7 +55,47 @@
     </div>
   </div>
 
-  <footer class="footer mt-auto py-3 footer-custom">
+  <div class="hero hero-disabled" id="places">
+    <div class="px-4 py-5 my-5 text-center">
+      <h1 class="display-10 fw-bold lh-1 mb-3">Выберите места</h1>
+      <div class="col-lg-6 mx-auto">
+        <div class="d-grid gap-5 d-sm-flex justify-content-sm-center" style="padding-top: 12vh;">
+          <a href="#auth" class="btn btn-primary order-btn" id="displayAuth" value="day">Далее</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero hero-disabled" id="auth">
+    <div class="px-4 py-5 my-5 text-center">
+      <h1 class="display-10 fw-bold lh-1 mb-3">Авторизация</h1>
+      <div class="col-lg-6 mx-auto">
+        <div class="d-grid gap-5 d-sm-flex justify-content-sm-center">
+          <div class="registration-form">
+            <form id="register">
+              <div class="form-group">
+                <input type="text" class="form-control item" id="username" placeholder="ФИО">
+              </div>
+              <div class="form-group">
+                <input type="text" class="form-control item" id="email" placeholder="Электронная почта">
+              </div>
+              <div class="form-group">
+                <input type="text" class="form-control item" id="phone-number" placeholder="Номер телефона">
+              </div>
+              <div class="form-group">
+                <input type="password" class="form-control item" id="password" placeholder="Пароль">
+              </div>
+              <div class="form-group">
+                <button type="button" class="btn btn-block create-account">Зарегистрироваться</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer py-3 footer-custom">
     <div class="container">
       <div class="row">
         <div class="col-8">
