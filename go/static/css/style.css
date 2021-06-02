@@ -52,7 +52,7 @@ body {
   padding: 1em;
 }
 
-ul {
+.box ul {
   list-style-type: none;
   margin: 0;
   padding: 0;
@@ -60,7 +60,7 @@ ul {
   text-transform: uppercase;
 }
 
-li a {
+.box li a {
   display: block;
   color: black;
   text-align: center;
