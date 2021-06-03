@@ -107,3 +107,48 @@ body {
 .footer-logo {
   padding: 1em;
 }
+
+.box ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  text-transform: uppercase;
+}
+
+.box li a {
+  display: block;
+  color: black;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+.table {
+  position: relative; 
+  width: 230px;
+  height: 50px;
+  background: #C4C4C4;
+}
+.computer {
+  border: solid #FF1010;
+  width: 30px;
+}
+
+.chair {
+  width: 20px;
+  height: 20px;
+  background-color: #C4C4C4;
+  float:left; 
+  margin: 0 40px 40px 0;
+  text-align:center;
+  margin-top: 10px;
+  margin-left: 6px;
+}
+
+.right {
+  float: right;
+}
+
+.left {
+  float: left;
+}
