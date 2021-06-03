@@ -2,13 +2,15 @@
 
 body {
   font-family: "Roboto", sans-serif;
+
+  background: #fff;
 }
 
 .hero {
   width: 100%;
   height: 100%;
 
-  background: #eeeff1;
+  background: #fff;
 
   padding-top: 18vh;
   padding-bottom: 40vh;
@@ -52,7 +54,17 @@ body {
   padding: 1em;
 }
 
-.box ul {
+.navbar {
+  width: 100%;
+  top: 0;
+  padding-top: 3em;
+  position: fixed;
+  transition: all 0.3s ease;
+  display: block;
+  float: right;
+}
+
+.navbar ul {
   list-style-type: none;
   margin: 0;
   padding: 0;
@@ -60,10 +72,30 @@ body {
   text-transform: uppercase;
 }
 
-.box li a {
+.navbar ul li {
+  float: right;
+  margin-right: 6em;
+  transition: all 0.3s ease;
+}
+
+.navbar li a {
   display: block;
   color: black;
   text-align: center;
-  padding: 14px 16px;
   text-decoration: none;
+  font-weight: 450;
+}
+
+.navbar li a:hover {
+  color: #263c58;
+}
+
+.navbar-scroll {
+  background-color: #fff;
+  padding-top: 1em;
+  padding-bottom: 1em;
+}
+
+.navbar-scroll ul li {
+  margin-right: 3em;
 }
