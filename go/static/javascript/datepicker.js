@@ -41,5 +41,8 @@ $(function () {
     maxSpan: {
       "days": 30
     }
-  }, function (start, end, label) { });
+  }, function (start, end, label) {
+    $('#tables').removeClass("hero-disabled")
+    window.location.href = '#tables'
+  });
 });
