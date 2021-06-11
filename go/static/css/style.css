@@ -125,41 +125,63 @@ body {
 }
 
 body {
-    background-color: #eeeff1;
-  }
+  background-color: #eeeff1;
+}
+
+.parent{
+  display: flex;
+}
 
 .back {
-    align-content: space-around;
-    border: 1px solid black;
-  }
+  border: 1px solid black;
+  width: 1000px;
+  height: 700px;
+}
   
 .table {
-    width: 230px;
-    height: 50px;
-    background: #c4c4c4;
-    display: flex;
-    justify-content: space-between;
-  }
-  
+  width: 300px;
+  height: 50px;
+  background: #c4c4c4;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  margin-left: 10%;
+}
+
+.wide_table {
+  width: 270px;
+  height: 150px;
+  background: #c4c4c4;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  margin-left: 10%;
+}
 .computer {
-    border: solid #ff1010;
-    width: 30px;
-    height: 0;
-  }
+  border: solid #ff1010;
+  width: 30px;
+  height: 0;
+}
   
 .chair {
-    width: 20px;
-    height: 20px;
-    background-color: #c4c4c4;
-    float: left;
-    margin: 0 40px 30px 0;
-    text-align:center;
-    margin-top: 10px;
-    margin-left: 6px;
-  }
+  width: 30px;
+  height: 20px;
+  background-color: #c4c4c4;
+  float: left;
+  margin: 0 40px 30px 0;
+  margin-top: 10px;
+  margin-left: 6px;
+}
 
 .projector {
-    border: solid blue;
-    width: 0px;
-    height: 200px;
-  }
+  border: solid blue;
+  height: 120px;
+  float: left;
+  margin-left: 0.5%;
+}
+
+.invisible {
+  height: 150px;
+  display: flex;
+  justify-content: space-between;
+}
