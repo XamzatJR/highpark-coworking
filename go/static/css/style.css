@@ -134,8 +134,8 @@ display: flex;
 
 .back {
   border: 1px solid black;
-  width: 500px;
-  height: 700px;
+  width: 1000px;
+  height: 1000px;
 }
 
 .table {
@@ -146,7 +146,6 @@ display: flex;
   justify-content: space-between;
   flex-direction: row;
   margin-left: 10%;
-  
 }
 
 .wide_table {
