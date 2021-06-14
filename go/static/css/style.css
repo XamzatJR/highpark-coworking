@@ -160,10 +160,24 @@ body {
   margin-right: 3.65em;
 }
 
+.chair-h2 {
+  width: 30px;
+  height: 18px;
+  background-color: #c4c4c4;
+  margin-right: 2em;
+}
+
 .chair-v {
   width: 18px;
   height: 30px;
   background-color: #c4c4c4;
+}
+
+.table-wide {
+  width: 160px;
+  height: 92px;
+  background: #c4c4c4;
+  margin: 2em;
 }
 
 .projector {
