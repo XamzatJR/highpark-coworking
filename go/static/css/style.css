@@ -128,49 +128,42 @@ body {
   background-color: #eeeff1;
 }
 
-.parent{
-display: flex;
-}
-
 .back {
   border: 1px solid black;
   width: 1000px;
   height: 1000px;
 }
 
-.table {
+.table-h {
   width: 300px;
   height: 50px;
   background: #c4c4c4;
-  display: flex;
-  justify-content: space-between;
-  flex-direction: row;
-  margin-left: 10%;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
 }
 
-.wide_table {
-  width: 270px;
-  height: 150px;
+.table-v {
+  width: 50px;
+  height: 300px;
   background: #c4c4c4;
-  display: flex;
-  justify-content: space-between;
-  flex-direction: row;
-  margin-left: 10%;
 }
+
 .computer {
   border: solid #ff1010;
   width: 30px;
-  height: 0;
 }
 
-.chair {
+.chair-h {
   width: 30px;
-  height: 20px;
+  height: 18px;
   background-color: #c4c4c4;
-  float: left;
-  margin: 0 40px 30px 0;
-  margin-top: 10px;
-  margin-left: 6px;
+  margin-right: 3.65em;
+}
+
+.chair-v {
+  width: 18px;
+  height: 30px;
+  background-color: #c4c4c4;
 }
 
 .projector {
