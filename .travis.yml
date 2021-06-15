@@ -4,8 +4,8 @@ python:
   - "3.9"
 
 install:
-  - pip install pipenv
-  - pipenv install --dev
+  - pip install poetry
+  - poetry install
 
 script:
   - pytest
