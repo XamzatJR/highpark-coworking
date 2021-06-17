@@ -10,15 +10,19 @@
       integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0"
       crossorigin="anonymous"
     />
-    <link rel="stylesheet" href="static/css/style.css" />
+    <link rel="stylesheet" href="/go/static/css/style.css" />
     <title>Document</title>
   </head>
   <body>
-    <form action="api/auth/login" method="POST">
-      <input type="text" name="email" id="email" />
-      <input type="password" name="password" id="password" />
-      <input type="button" value="ok" id="login" />
-    </form>
+    <div class="col-5" style="border: 2px grey solid; border-radius: 10px; background-color: rgb(248,249,250); margin-top: 10%; margin-left: 35%;">
+      <form action="api/auth/login" method="POST" class="pt-5" style="width: 50%; margin: 0 auto;">
+        <h3 class="text-center mb-4">Авторизация</h3>
+        <p style="position: relative; text-align: center;"><input type="text" name="email" id="email" style="border-radius: 10px;" /></p>
+        <p style="position: relative; text-align: center;"><input type="password" name="password" id="password" style="border-radius: 10px;"/></p>
+        <input type="hidden" name="next" value="{{next}}" />
+        <p style="position: relative; text-align: center; align-items: center;"><button type="button" class="btn btn-primary order-btn" value="ok" id="login" style="">Войти</button></p>
+      </form>
+    </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script>
