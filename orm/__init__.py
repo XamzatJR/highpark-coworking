@@ -50,7 +50,7 @@ class BaseModel(Model):
 
 
 class User(BaseModel):
-    full_name = CharField()
+    fullname = CharField()
     email = CharField(unique=True)
     phone = CharField(unique=True)
     password = CharField()
