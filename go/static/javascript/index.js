@@ -9,13 +9,13 @@ $(window).scroll(function () {
 });
 
 $("#displayService").click(function (e) {
-    $("#service").removeClass("hero-disabled")
-})
+  $("#service").removeClass("hero-disabled");
+});
 
 $("#displayDateDaily").click(function (e) {
-    $("#date").removeClass("hero-disabled")
-    period = $(this).attr("value")
-})
+  $("#date").removeClass("hero-disabled");
+  period = $(this).attr("value");
+});
 
 $("#displayDateMonthly").click(function (e) {
     $("#date").removeClass("hero-disabled")

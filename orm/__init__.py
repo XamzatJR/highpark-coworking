@@ -17,9 +17,7 @@ from peewee import (
 
 
 def get_db() -> Database:
-    if sys.argv[0].split("\\")[-1] == "pytest" or (
-        len(sys.argv) > 1 and sys.argv[2] == "pytest"
-    ):
+    if "pytest" in sys.argv[0].split("\\"):
         return SqliteDatabase(
             "test_database.db",
             pragmas={"journal_mode": "wal", "cache_size": -1024 * 64},
