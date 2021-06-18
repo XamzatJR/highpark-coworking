@@ -39,5 +39,8 @@ $(function () {
       $("#places").removeClass("hero-disabled");
       location.href = "#places"
     }
-  );
+  }, function (start, end, label) {
+    $('#tables').removeClass("hero-disabled")
+    window.location.href = '#tables'
+  });
 });

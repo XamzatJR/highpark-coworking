@@ -1,5 +1,13 @@
 let period;
 
+$(window).scroll(function () {
+    if ($(document).scrollTop() > 120) {
+        $('.navbar').addClass('navbar-scroll');
+    } else {
+        $('.navbar').removeClass('navbar-scroll');
+    }
+});
+
 $("#displayService").click(function (e) {
   $("#service").removeClass("hero-disabled");
 });
@@ -10,10 +18,10 @@ $("#displayDateDaily").click(function (e) {
 });
 
 $("#displayDateMonthly").click(function (e) {
-  $("#date").removeClass("hero-disabled");
-  period = $(this).attr("value");
-});
+    $("#date").removeClass("hero-disabled")
+    period = $(this).attr("value")
+})
 
-$("#displayAuth").click(function (e) {
-  $("#auth").removeClass("hero-disabled");
-});
+$("#displayLogin").click(function (e) {
+    $("#login").removeClass("hero-disabled")
+})
