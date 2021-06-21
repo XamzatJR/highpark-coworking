@@ -20,10 +20,10 @@ def get_db() -> Database:
     if "pytest" in sys.argv[0].split("\\"):
         return SqliteDatabase(
             "test_database.db",
-            pragmas={"journal_mode": "wal", "cache_size": -1024 * 64},
+            pragmas={"cache_size": -1024 * 64},
         )
     return SqliteDatabase(
-        "database.db", pragmas={"journal_mode": "wal", "cache_size": -1024 * 64}
+        "database.db", pragmas={"cache_size": -1024 * 64}
     )
 
 
@@ -50,7 +50,7 @@ class BaseModel(Model):
 
 
 class User(BaseModel):
-    full_name = CharField()
+    fullname = CharField()
     email = CharField(unique=True)
     phone = CharField(unique=True)
     password = CharField()

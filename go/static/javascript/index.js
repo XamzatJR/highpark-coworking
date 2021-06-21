@@ -22,10 +22,6 @@ $('#displayDateMonthly').click(function (e) {
     period = $(this).attr('value')
 })
 
-$('body').on('click', '.free', function () {
-    $(this).toggleClass('marked');
-});
-
 $('#displayLogin').click(function (e) {
     $('#login').removeClass('hero-disabled')
 })

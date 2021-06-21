@@ -6,7 +6,7 @@ from pydantic import BaseModel, ValidationError, validator
 
 
 class RegisterModel(BaseModel):
-    full_name: str
+    fullname: str
     email: str
     phone: str
     password: str
@@ -16,8 +16,8 @@ class RegisterModel(BaseModel):
         delattr(model, "password")
         return model
 
-    @validator("full_name")
-    def full_name_validator(cls, name: str):
+    @validator("fullname")
+    def fullname_validator(cls, name: str):
         if " " not in name and len(name) < 3:
             raise ValidationError("must contain a space")
         return name.title()
@@ -58,5 +58,5 @@ class TokenModel(BaseModel):
 class UserModel(BaseModel):
     username: str
     email: Optional[str] = None
-    full_name: Optional[str] = None
+    fullname: Optional[str] = None
     disabled: Optional[bool] = None
