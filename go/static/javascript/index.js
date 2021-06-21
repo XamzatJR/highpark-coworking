@@ -8,20 +8,24 @@ $(window).scroll(function () {
     }
 });
 
-$("#displayService").click(function (e) {
-  $("#service").removeClass("hero-disabled");
+$('#displayService').click(function (e) {
+    $('#service').removeClass('hero-disabled');
 });
 
-$("#displayDateDaily").click(function (e) {
-  $("#date").removeClass("hero-disabled");
-  period = $(this).attr("value");
+$('#displayDateDaily').click(function (e) {
+    $('#date').removeClass('hero-disabled');
+    period = $(this).attr('value');
 });
 
-$("#displayDateMonthly").click(function (e) {
-    $("#date").removeClass("hero-disabled")
-    period = $(this).attr("value")
+$('#displayDateMonthly').click(function (e) {
+    $('#date').removeClass('hero-disabled')
+    period = $(this).attr('value')
 })
 
-$("#displayLogin").click(function (e) {
-    $("#login").removeClass("hero-disabled")
+$('body').on('click', '.free', function () {
+    $(this).toggleClass('marked');
+});
+
+$('#displayLogin').click(function (e) {
+    $('#login').removeClass('hero-disabled')
 })

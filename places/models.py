@@ -10,3 +10,5 @@ class FreePlacesModel(BaseModel):
 
 class PlaceModel(FreePlacesModel):
     place: int
+    start: date
+    end: date
