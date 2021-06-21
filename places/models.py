@@ -1,14 +1,15 @@
 from datetime import date
+from typing import Optional
 
 from pydantic import BaseModel
 
 
-class FreePlacesModel(BaseModel):
+class DatePlacesModel(BaseModel):
     start: date
     end: date
 
 
-class PlaceModel(FreePlacesModel):
+class PlaceModel(BaseModel):
     place: int
-    start: date
-    end: date
+    start: Optional[date]
+    end: Optional[date]

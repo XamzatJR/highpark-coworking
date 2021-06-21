@@ -151,6 +151,7 @@ body {
   height: 18px;
   background-color: #c4c4c4;
   margin-right: 3.65em;
+  cursor: pointer;
 }
 
 .chair-h2 {
@@ -158,12 +159,14 @@ body {
   height: 18px;
   background-color: #c4c4c4;
   margin-right: 2em;
+  cursor: pointer;
 }
 
 .chair-v {
   width: 18px;
   height: 30px;
   background-color: #c4c4c4;
+  cursor: pointer;
 }
 
 .table-wide {
