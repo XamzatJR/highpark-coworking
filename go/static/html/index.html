@@ -6,18 +6,30 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0" crossorigin="anonymous" />
   <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
   <link rel="stylesheet" href="/static/css/style.css" />
   <title>Коворкинг</title>
+</head>
 
 <body>
+  <div class="navbar">
+    <ul>
+      <li><a href="/login">Войти</a></li>
+      <li><a href="#contact">Контакты</a></li>
+      <li><a href="#rules">Правила</a></li>
+      <li><a href="#time">Время работы</a></li>
+      <li><a href="#about">О нас</a></li>
+      <li><a href="/">Главная</a></li>
+    </ul>
+  </div>
   <div class="hero">
     <div class="container col-xxl-8 px-4 py-5">
       <div class="row flex-lg-row align-items-center g-5 py-5">
         <div class="col-10 col-sm-8 col-lg-6">
-          <img src="/static/svg/icon.svg"" class=" d-block mx-lg-auto img-fluid" alt="Logo" loading="lazy">
+          <img src="/static/svg/icon.svg" class=" d-block mx-lg-auto img-fluid" alt="Logo" loading="lazy">
         </div>
         <div class="col-lg-6">
-          <h1 class="display-10 fw-bold lh-1 mb-3">Коворкинг “Хайпарка ГГНТУ”</h1>
+          <h1 class="display-10 fw-bold lh-1 mb-3">Коворкинг «Хайпарка ГГНТУ»‎</h1>
           <p class="text-muted">Сервис заказа места в
             коворкинге “Хайпарка ГГНТУ”. Коворкинг находится в
             самом центре города Грозный по адресу пр.Х.А.Исаева дом 100. У нас вы
@@ -55,7 +67,170 @@
     </div>
   </div>
 
-  <footer class="footer mt-auto py-3 footer-custom">
+  <div class="hero hero-disabled" id="tables">
+    <div class="px-4 py-5 my-5 ">
+      <h1 class="display-10 fw-bold lh-1 mb-3 text-center">Выберите место</h1>
+      <div class="container">
+        <div class="row">
+          <div class="col border border-primary">
+            <div class="row align-items-start">
+              <div class="col">
+                <div class="table-h" style="margin-left:5%;">
+                  <div class="computer float-start"></div>
+                  <div class="computer float-end"></div>
+                </div>
+                <div class="d-flex justify-content-start" style="margin-left: 5%;">
+                  <div class="chair-h" id="1"></div>
+                  <div class="chair-h" id="2"></div>
+                  <div class="chair-h" id="3"></div>
+                  <div class="chair-h" id="4"></div>
+                </div>
+              </div>
+              <div class="col">
+                <div class='projector' style="margin-top: 2%; margin-left: 0.5%;"></div>
+                <div class="d-flex justify-content-start mt-5">
+                  <div class="chair-h" id="5" style="margin-left: 8.5%;"></div>
+                  <div class="chair-h" id="6"></div>
+                  <div class="chair-h" id="7"></div>
+                  <div class="chair-h" id="8"></div>
+                </div>
+                <div class="table-h" style="margin-left: 10%;"></div>
+                <div class="d-flex justify-content-start">
+                  <div class="chair-h" id="9" style="margin-left: 10%;"></div>
+                  <div class="chair-h" id="10"></div>
+                  <div class="chair-h" id="11"></div>
+                  <div class="chair-h" id="12"></div>
+                </div>
+              </div>
+              <div class="col">
+                <div class="d-flex justify-content-start mt-5" style="margin-left: 5%;">
+                  <div class="chair-h" id="13"></div>
+                  <div class="chair-h" id="14"></div>
+                  <div class="chair-h" id="15"></div>
+                  <div class="chair-h" id="16"></div>
+                </div>
+                <div class="table-h" style="margin-left: 5%;">
+                  <div class="computer float-start mt-5"></div>
+                  <div class="computer float-end mt-5"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col border border-primary">
+            <div class="row mt-5">
+              <div class="col">
+                <div class="row">
+                  <div class="col-1">
+                    <div class="chair-v mt-3 mb-5" id="17"></div>
+                    <div class="chair-v mt-3 mb-5" id="18"></div>
+                    <div class="chair-v mt-3 mb-5" id="19"></div>
+                    <div class="chair-v mt-3 mb-5" id="20"></div>
+                  </div>
+                  <div class="col-3">
+                    <div class="table-v"></div>
+                  </div>
+                  <div class="col-2">
+                    <div class="chair-v mt-3 mb-5" id="21"></div>
+                    <div class="chair-v mt-3 mb-5" id="22"></div>
+                    <div class="chair-v mt-3 mb-5" id="23"></div>
+                    <div class="chair-v mt-3 mb-5" id="24"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="col">
+                <div class="row">
+                  <div class="col-1">
+                    <div class="chair-v mt-3 mb-5" id="25"></div>
+                    <div class="chair-v mt-3 mb-5" id="26"></div>
+                    <div class="chair-v mt-3 mb-5" id="27"></div>
+                    <div class="chair-v mt-3 mb-5" id="28"></div>
+                  </div>
+                  <div class="col-3">
+                    <div class="table-v"></div>
+                  </div>
+                  <div class="col-2">
+                    <div class="chair-v mt-3 mb-5" id="29"></div>
+                    <div class="chair-v mt-3 mb-5" id="30"></div>
+                    <div class="chair-v mt-3 mb-5" id="31"></div>
+                    <div class="chair-v mt-3 mb-5" id="32"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col border border-primary">
+            <div class="projector" style="float: right; margin-right: 1%; margin-top: 1%;"></div>
+            <div class="d-flex justify-content-start mt" style="margin-top: 30%; margin-left: 5%;">
+              <div class="chair-h2" id="33"></div>
+              <div class="chair-h2" id="34"></div>
+              <div class="chair-h2" id="35"></div>
+              <div class="chair-h2" id="36"></div>
+            </div>
+            <div class="table-wide"></div>
+            <div class="d-flex justify-content-start" style="margin-left: 5%;">
+              <div class="chair-h2" id="37"></div>
+              <div class="chair-h2" id="38"></div>
+              <div class="chair-h2" id="39"></div>
+              <div class="chair-h2" id="40"></div>
+            </div>
+            <div class="d-flex justify-content-start mt-4" style="margin-left: 5%;">
+              <div class="chair-h" id="41"></div>
+              <div class="chair-h" id="42"></div>
+              <div class="chair-h" id="43"></div>
+              <div class="chair-h" id="44"></div>
+            </div>
+            <div class="table-h" style="margin-left: 5%;">
+              <div class="d-flex justify-content-between">
+                <div class="computer mt-5"></div>
+                <div class="computer mt-5"></div>
+                <div class="computer mt-5"></div>
+                <div class="computer mt-5"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-4">
+          <div class="computer"></div>
+          <span>
+            Монитор
+          </span>
+          <br><br>
+          <div style="border: solid blue; width: 30px;"></div>
+          <span>
+            Проектор
+          </span>
+        </div>
+        <a href="#login" class="btn btn-primary order-btn float-end" id="displayLogin">Далее</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero hero-disabled" id="login">
+    <div class="px-4 py-5 my-5">
+      <h1 class="display-10 fw-bold lh-1 mb-3 text-center">Регистрация</h1>
+      <div class="registration-form">
+        <form>
+          <div class="form-group">
+            <input type="text" class="form-control item" id="username" placeholder="Имя">
+          </div>
+          <div class="form-group">
+            <input type="text" class="form-control item" id="email" placeholder="Почта">
+          </div>
+          <div class="form-group">
+            <input type="text" class="form-control item" id="phone-number" placeholder="Номер телефона">
+          </div>
+          <div class="form-group">
+            <input type="password" class="form-control item" id="password" placeholder="Пароль">
+          </div>
+          <div class="form-group">
+            <button type="button" class="btn btn-block create-account">Зарегистрироваться</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <footer class="footer mt-auto py-3 footer-custom sticky-bottom">
     <div class="container">
       <div class="row">
         <div class="col-8">
@@ -70,10 +245,11 @@
       </div>
     </div>
   </footer>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
   <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
   <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
-  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script src="/static/javascript/datepicker.js"></script>
   <script src="/static/javascript/index.js"></script>
 </body>

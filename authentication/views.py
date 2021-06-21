@@ -49,6 +49,9 @@ def register(
     user_model.password = encrypt_password(user_model.password)
     user = User.create(**user_model.dict())
     background_tasks.add_task(send_activation, request.base_url._url, user)
+    if user_model.date and user_model.places:
+        # TODO: Save user's selected places
+        pass
     return user_model.exclude_password()
 
 
@@ -56,7 +59,9 @@ def register(
 def activate_user(code: str):
     user = User.get_by_code(code)
     if not user:
-        return JSONResponse({"error": "Сan't find the user"}, status.HTTP_204_NO_CONTENT)
+        return JSONResponse(
+            {"error": "Сan't find the user"}, status.HTTP_204_NO_CONTENT
+        )
     if datetime.now() > user.expires:
         return JSONResponse({"error": "Сode expired"}, status.HTTP_204_NO_CONTENT)
     user.is_active = True

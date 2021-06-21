@@ -2,25 +2,22 @@ import re
 from string import punctuation, whitespace
 from typing import Optional
 
+from places.models import DatePlacesModel, PlaceModel
 from pydantic import BaseModel, ValidationError, validator
 
 
 class RegisterModel(BaseModel):
-    full_name: str
+    fullname: str
     email: str
     phone: str
     password: str
+    date: Optional[DatePlacesModel] = None
+    places: Optional[PlaceModel] = None
 
     def exclude_password(self):
         model = self
         delattr(model, "password")
         return model
-
-    @validator("full_name")
-    def full_name_validator(cls, name: str):
-        if " " not in name and len(name) < 3:
-            raise ValidationError("must contain a space")
-        return name.title()
 
     @validator("email")
     def email_validator(cls, email: str):
@@ -58,5 +55,5 @@ class TokenModel(BaseModel):
 class UserModel(BaseModel):
     username: str
     email: Optional[str] = None
-    full_name: Optional[str] = None
+    fullname: Optional[str] = None
     disabled: Optional[bool] = None
