@@ -127,26 +127,6 @@ body {
   padding: 1em;
 }
 
-.box ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-  text-transform: uppercase;
-}
-
-.box li a {
-  display: block;
-  color: black;
-  text-align: center;
-  padding: 14px 16px;
-  text-decoration: none;
-}
-
-body {
-  background-color: #eeeff1;
-}
-
 .table-h {
   width: 300px;
   height: 50px;
@@ -171,6 +151,7 @@ body {
   height: 18px;
   background-color: #c4c4c4;
   margin-right: 3.65em;
+  cursor: pointer;
 }
 
 .chair-h2 {
@@ -178,12 +159,14 @@ body {
   height: 18px;
   background-color: #c4c4c4;
   margin-right: 2em;
+  cursor: pointer;
 }
 
 .chair-v {
   width: 18px;
   height: 30px;
   background-color: #c4c4c4;
+  cursor: pointer;
 }
 
 .table-wide {
@@ -191,6 +174,22 @@ body {
   height: 92px;
   background: #c4c4c4;
   margin: 2em;
+}
+
+.free {
+  background-color: blue;
+}
+
+.free:hover {
+  background-color: green;
+}
+
+.marked {
+  background-color: green;
+}
+
+.occupied {
+  background-color: red;
 }
 
 .projector {
@@ -292,4 +291,30 @@ body {
     font-size: 30px;
     line-height: 70px;
   }
+}
+
+.box {
+  margin: 0 auto;
+  padding-left: 20%;
+  padding-top: 10em;
+  padding-bottom: 15.4em;
+}
+
+.box img {
+  width: 250px;
+  height: 250px;
+  border-radius: 5%;
+  float: left;
+}
+
+.box a {
+  width: 250px;
+  display: block;
+  clear: left;
+}
+
+.information {
+  margin-left: 300px;
+  display: block;
+  position: absolute;
 }

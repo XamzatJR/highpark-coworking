@@ -14,7 +14,7 @@ atexit.register(drop_tables)
 client = TestClient(app)
 
 user_model = RegisterModel(
-    full_name="Test User",
+    fullname="Test User",
     email="test@mail.local",
     phone="88000000000",
     password="password",
@@ -29,7 +29,7 @@ def test_register():
     assert response.status_code == 200
 
     data = json.loads(response.content)
-    assert data["full_name"] == user_model.full_name
+    assert data["fullname"] == user_model.fullname
     assert data["email"] == user_model.email
     assert data["phone"] == user_model.phone
 

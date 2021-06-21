@@ -2,6 +2,7 @@ import re
 from string import punctuation, whitespace
 from typing import Optional
 
+from places.models import DatePlacesModel, PlaceModel
 from pydantic import BaseModel, ValidationError, validator
 
 
@@ -10,6 +11,8 @@ class RegisterModel(BaseModel):
     email: str
     phone: str
     password: str
+    date: Optional[DatePlacesModel] = None
+    places: Optional[PlaceModel] = None
 
     def exclude_password(self):
         model = self
@@ -52,5 +55,5 @@ class TokenModel(BaseModel):
 class UserModel(BaseModel):
     username: str
     email: Optional[str] = None
-    full_name: Optional[str] = None
+    fullname: Optional[str] = None
     disabled: Optional[bool] = None
