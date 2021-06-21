@@ -19,12 +19,6 @@ class RegisterModel(BaseModel):
         delattr(model, "password")
         return model
 
-    @validator("fullname")
-    def fullname_validator(cls, name: str):
-        if " " not in name and len(name) < 3:
-            raise ValidationError("must contain a space")
-        return name.title()
-
     @validator("email")
     def email_validator(cls, email: str):
         if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
