@@ -87,6 +87,7 @@ class Place(BaseModel):
     place = IntegerField()
     start = DateField()
     end = DateField()
+    price = IntegerField(default=0)
     paid_for = BooleanField(default=False)
 
 

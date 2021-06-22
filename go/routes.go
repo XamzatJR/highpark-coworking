@@ -5,7 +5,13 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+
+	"github.com/gorilla/mux"
 )
+
+func faviconHandler(w http.ResponseWriter, r *http.Request) {
+	http.ServeFile(w, r, staticDir+"/favicon.ico")
+}
 
 func index(w http.ResponseWriter, r *http.Request) {
 	html, err := ioutil.ReadFile(htmlDir + "index.html")
@@ -17,6 +23,15 @@ func index(w http.ResponseWriter, r *http.Request) {
 
 func login(w http.ResponseWriter, r *http.Request) {
 	html, err := ioutil.ReadFile(htmlDir + "login.html")
+	if err != nil {
+		log.Fatalln(err)
+	}
+	fmt.Fprint(w, string(html))
+}
+
+func dynamicTemplateHandler(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	html, err := ioutil.ReadFile(htmlDir + vars["template"] + ".html")
 	if err != nil {
 		log.Fatalln(err)
 	}

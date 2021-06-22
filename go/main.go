@@ -29,9 +29,11 @@ func main() {
 	reverseProxy.Director = Director
 
 	router.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir(staticDir))))
+	router.HandleFunc("/favicon.ico", faviconHandler)
 	router.HandleFunc("/", index)
 	router.HandleFunc("/login", login)
 	router.HandleFunc("/logout", logout)
+	router.HandleFunc("/{template}", dynamicTemplateHandler)
 	router.PathPrefix("/api/").HandlerFunc(apiReverseProxy)
 
 	router.Use(RequestLoggerMiddleware(router))

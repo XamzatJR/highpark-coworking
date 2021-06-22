@@ -13,6 +13,7 @@ class RegisterModel(BaseModel):
     password: str
     date: Optional[DatePlacesModel] = None
     places: Optional[list[PlaceModel]] = None
+    period: Optional[str] = None
 
     def exclude_password(self):
         model = self
@@ -37,7 +38,7 @@ class RegisterModel(BaseModel):
 
     @validator("password")
     def password_validator(cls, password: str):
-        if len(password) < 5:
+        if len(password) < 4:
             raise ValidationError("Password is weak")
         return password
 

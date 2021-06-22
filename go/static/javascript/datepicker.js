@@ -50,7 +50,7 @@ $(function () {
       start_g = start;
       end_g = end;
       axios
-        .post("http://127.0.0.1:8000/free-places", { start: start, end: end }) // TODO: Change address
+        .post("/api/free-places", { start: start, end: end })
         .then(function (response) {
           $(".chair-h").addClass("free");
           $(".chair-h2").addClass("free");
