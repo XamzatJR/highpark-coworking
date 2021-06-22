@@ -2,7 +2,7 @@ from datetime import datetime
 from fastapi import APIRouter, BackgroundTasks, status
 from fastapi.responses import JSONResponse
 from mail import send_activation
-from orm import User
+from orm import User, Place
 from starlette.requests import Request
 
 from .models import LoginModel, RegisterModel, TokenModel
@@ -50,8 +50,13 @@ def register(
     user = User.create(**user_model.dict())
     background_tasks.add_task(send_activation, request.base_url._url, user)
     if user_model.date and user_model.places:
-        # TODO: Save user's selected places
-        pass
+        for place in user_model.places:
+            Place.create(
+                user=user,
+                place=place.place,
+                start=user_model.date.start,
+                end=user_model.date.end,
+            )
     return user_model.exclude_password()
 
 

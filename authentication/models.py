@@ -12,7 +12,7 @@ class RegisterModel(BaseModel):
     phone: str
     password: str
     date: Optional[DatePlacesModel] = None
-    places: Optional[PlaceModel] = None
+    places: Optional[list[PlaceModel]] = None
 
     def exclude_password(self):
         model = self

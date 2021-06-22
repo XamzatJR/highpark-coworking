@@ -1,3 +1,6 @@
+let start_g;
+let end_g;
+
 $(function () {
   let tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);
@@ -44,6 +47,8 @@ $(function () {
       end = `${end._d.getFullYear()}-${
         end._d.getMonth() + 1
       }-${end._d.getDate()}`;
+      start_g = start;
+      end_g = end;
       axios
         .post("http://127.0.0.1:8000/free-places", { start: start, end: end }) // TODO: Change address
         .then(function (response) {

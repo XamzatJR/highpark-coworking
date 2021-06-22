@@ -210,7 +210,7 @@
     <div class="px-4 py-5 my-5">
       <h1 class="display-10 fw-bold lh-1 mb-3 text-center">Регистрация</h1>
       <div class="registration-form">
-        <form>
+        <form id="register">
           <div class="form-group">
             <input type="text" class="form-control item" id="username" placeholder="Имя">
           </div>
@@ -224,7 +224,7 @@
             <input type="password" class="form-control item" id="password" placeholder="Пароль">
           </div>
           <div class="form-group">
-            <button type="button" class="btn btn-block create-account">Зарегистрироваться</button>
+            <button type="submit" class="btn btn-block create-account">Зарегистрироваться</button>
           </div>
         </form>
       </div>
@@ -250,6 +250,7 @@
   <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="https://unpkg.com/imask"></script>
   <script src="/static/javascript/datepicker.js"></script>
   <script src="/static/javascript/index.js"></script>
 </body>

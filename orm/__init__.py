@@ -12,8 +12,11 @@ from peewee import (
     ForeignKeyField,
     IntegerField,
     Model,
+    PostgresqlDatabase,
     SqliteDatabase,
 )
+
+from setting import settings
 
 
 def get_db() -> Database:
@@ -22,8 +25,12 @@ def get_db() -> Database:
             "test_database.db",
             pragmas={"foreign_keys": 1, "cache_size": -1024 * 64},
         )
-    return SqliteDatabase(
-        "database.db", pragmas={"foreign_keys": 1, "cache_size": -1024 * 64}
+    return PostgresqlDatabase(
+        settings().db_name,
+        user=settings().db_user,
+        password=settings().db_password,
+        host=settings().db_host,
+        port=settings().db_port,
     )
 
 
