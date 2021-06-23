@@ -12,7 +12,7 @@
 </head>
 
 <body>
-<div class="navbar">
+  <div class="navbar">
     <ul>
       <li><a href="/login">Войти</a></li>
       <li><a href="/contacts">Контакты</a></li>
@@ -21,18 +21,18 @@
       <li><a href="/about">О нас</a></li>
       <li><a href="/">Главная</a></li>
     </ul>
-</div>
-<div class="box">
+  </div>
+  <div class="box">
     <div class="information">
-        <h4>Магомед Минцаев</h4>
-        <h4>Почтовый адрес: mintsaev@gmail.com</h4>
-        <h4>Телефон:+7 999 999 99 99</h4>
+      <h4 id="fullname"></h4>
+      <h4 id="email">Почтовый адрес: </h4>
+      <h4 id="phone">Телефон: </h4>
     </div>
-    <img class="mb-4" src="/static/images/1.jpg">
+    <img class="mb-4" src="/static/images/userpic.png">
     <a class="btn btn-primary order-btn" href="#">Редактировать профиль</a>
     <a class="btn btn-primary order-btn mt-3" href="#">Мои заказы</a>
-</div>
-<footer class="footer mt-auto py-3 footer-custom sticky-bottom">
+  </div>
+  <footer class="footer mt-auto py-3 footer-custom sticky-bottom">
     <div class="container">
       <div class="row">
         <div class="col-8">
@@ -46,8 +46,17 @@
         </div>
       </div>
     </div>
-</footer>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<script src="/static/javascript/auth.js"></script>
+  </footer>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="/static/javascript/auth.js"></script>
+  <script>
+    $(document).ready(() => {
+      axios.get('/api/profile').then((response) => {
+        $("#fullname").text(response.data.fullname)
+        $("#email").text($("#email").text() + response.data.email)
+        $("#phone").text($("#phone").text() + "+" + response.data.phone)
+      })
+    })
+  </script>
 </body>

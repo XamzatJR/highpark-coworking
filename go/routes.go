@@ -9,11 +9,12 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func faviconHandler(w http.ResponseWriter, r *http.Request) {
+func FaviconHandler(w http.ResponseWriter, r *http.Request) {
 	http.ServeFile(w, r, staticDir+"/favicon.ico")
 }
 
-func index(w http.ResponseWriter, r *http.Request) {
+func Index(w http.ResponseWriter, r *http.Request) {
+	CheckJwt(w, r)
 	html, err := ioutil.ReadFile(htmlDir + "index.html")
 	if err != nil {
 		log.Println(err)
@@ -21,17 +22,25 @@ func index(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprint(w, string(html))
 }
 
-func dynamicTemplateHandler(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	html, err := ioutil.ReadFile(htmlDir + vars["template"] + ".html")
+func Profile(w http.ResponseWriter, r *http.Request) {
+	html, err := ioutil.ReadFile(htmlDir + "profile.html")
 	if err != nil {
 		log.Println(err)
-		custom404(w, r)
 	}
 	fmt.Fprint(w, string(html))
 }
 
-func logout(w http.ResponseWriter, r *http.Request) {
+func DynamicTemplateHandler(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	html, err := ioutil.ReadFile(htmlDir + vars["template"] + ".html")
+	if err != nil {
+		log.Println(err)
+		Custom404(w, r)
+	}
+	fmt.Fprint(w, string(html))
+}
+
+func Logout(w http.ResponseWriter, r *http.Request) {
 	c := http.Cookie{
 		Name:   "Authorization",
 		MaxAge: -1}
@@ -39,7 +48,7 @@ func logout(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
 
-func apiReverseProxy(w http.ResponseWriter, r *http.Request) {
+func ApiReverseProxy(w http.ResponseWriter, r *http.Request) {
 	cookie, err := r.Cookie("Authorization")
 	if err != nil {
 		reverseProxy.ServeHTTP(w, r)
@@ -49,7 +58,7 @@ func apiReverseProxy(w http.ResponseWriter, r *http.Request) {
 	reverseProxy.ServeHTTP(w, r)
 }
 
-func custom404(w http.ResponseWriter, req *http.Request) {
+func Custom404(w http.ResponseWriter, req *http.Request) {
 	html, err := ioutil.ReadFile(htmlDir + "404.html")
 	if err != nil {
 		log.Println(err)

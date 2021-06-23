@@ -13,7 +13,7 @@ import (
 
 var staticDir = "./static"
 var htmlDir = staticDir + "/html/"
-var origin, _ = url.Parse(host())
+var origin, _ = url.Parse(Host())
 var path = "/api/*catchall"
 var reverseProxy = httputil.NewSingleHostReverseProxy(origin)
 
@@ -25,15 +25,16 @@ func init() {
 
 func main() {
 	router := mux.NewRouter()
-	router.NotFoundHandler = http.HandlerFunc(custom404)
+	router.NotFoundHandler = http.HandlerFunc(Custom404)
 	reverseProxy.Director = Director
 
 	router.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir(staticDir))))
-	router.HandleFunc("/favicon.ico", faviconHandler)
-	router.HandleFunc("/", index)
-	router.HandleFunc("/logout", logout)
-	router.HandleFunc("/{template}", dynamicTemplateHandler)
-	router.PathPrefix("/api/").HandlerFunc(apiReverseProxy)
+	router.HandleFunc("/favicon.ico", FaviconHandler)
+	router.HandleFunc("/", Index)
+	router.HandleFunc("/profile", Profile)
+	router.HandleFunc("/logout", Logout)
+	router.HandleFunc("/{template}", DynamicTemplateHandler)
+	router.PathPrefix("/api/").HandlerFunc(ApiReverseProxy)
 
 	router.Use(RequestLoggerMiddleware(router))
 

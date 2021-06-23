@@ -8,12 +8,12 @@ authors = ["azureswastika <azureswastika@gmail.com>"]
 python = "^3.9"
 fastapi = {extras = ["all"], version = "^0.65.2"}
 psycopg2 = "^2.9.1"
-
-[tool.poetry.dev-dependencies]
 peewee = "^3.14.4"
 python-jose = "^3.3.0"
 passlib = "^1.7.4"
 fastapi-mail = "^0.3.7"
+
+[tool.poetry.dev-dependencies]
 flake8 = "^3.9.2"
 black = "^21.6b0"
 pytest = "^6.2.4"

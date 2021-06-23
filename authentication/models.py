@@ -54,7 +54,6 @@ class TokenModel(BaseModel):
 
 
 class UserModel(BaseModel):
-    username: str
-    email: Optional[str] = None
-    fullname: Optional[str] = None
-    disabled: Optional[bool] = None
+    fullname: str
+    email: str
+    phone: str

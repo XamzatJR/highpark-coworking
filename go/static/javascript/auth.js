@@ -1,3 +1,9 @@
+const info = (message) =>
+  `<div class="alert alert-primary mt-3" role="alert">${message}</div>`;
+
+const danger = (message) =>
+  `<div class="alert alert-danger mt-3" role="alert">${message}</div>`;
+
 $(window).scroll(function () {
   if ($(document).scrollTop() > 120) {
     $(".navbar").addClass("navbar-scroll");
@@ -52,5 +58,22 @@ $("#register").submit(function (e) {
           );
         }
       });
+    });
+});
+
+$("#login").submit(function (e) {
+  $(".alert").remove();
+
+  e.preventDefault();
+  axios
+    .post("/api/auth/login", {
+      email: $("#email").val(),
+      password: $("#password").val(),
+    })
+    .then(function (response) {
+      window.location = "/profile";
+    })
+    .catch(function (e) {
+      $("#login").append(danger("Не удалось войти"));
     });
 });

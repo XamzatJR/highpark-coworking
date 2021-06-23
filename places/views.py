@@ -1,5 +1,8 @@
-from orm import Place
+from authentication.models import UserModel
+from authentication.utils import get_current_user
 from fastapi import APIRouter
+from fastapi.params import Depends
+from orm import Place, User
 
 from .models import DatePlacesModel, PlaceModel
 
@@ -22,3 +25,8 @@ def free_places(date_model: DatePlacesModel):
         or (date_model.start <= place.end <= date_model.end)
     ]
     return {"places": places}
+
+
+@router.get("/profile")
+def profile(user: User = Depends(get_current_user)):
+    return UserModel(fullname=user.fullname, email=user.email, phone=user.phone)
