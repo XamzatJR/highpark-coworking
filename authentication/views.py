@@ -1,45 +1,51 @@
 from datetime import datetime
-from fastapi import APIRouter, BackgroundTasks, status
+
+from fastapi.exceptions import HTTPException
+from setting import settings
+
+from fastapi import APIRouter, BackgroundTasks, Depends, Request, status
 from fastapi.responses import JSONResponse
 from mail import send_activation
-from orm import User, Place
-from starlette.requests import Request
+from orm import Place, User
 
 from .models import LoginModel, RegisterModel, TokenModel
-from .utils import (
-    ACCESS_TOKEN_EXPIRE_MINUTES,
-    check_user,
-    create_access_token,
-    encrypt_password,
-)
+from .utils import check_password, encrypt_password, AuthJWT
 
 router = APIRouter(prefix="/auth", tags=["Auth"])
 
 
+@AuthJWT.load_config
+def get_config():
+    return settings()
+
+
 @router.post("/token", response_model=TokenModel)
-def token(user_model: LoginModel):
+def token(user_model: LoginModel, Authorize: AuthJWT = Depends()):
     user = User.get_by_email(user_model.email)
-    check_user(user_model, user)
-    access_token = create_access_token({"email": user.email})
+    if not user or not check_password(user_model.password, user.password):
+        http_auth_error = HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect email or password",
+            headers={"Authenticate": "Bearer"},
+        )
+        return http_auth_error
+    access_token = Authorize.create_access_token(subject=user.email)
     return {"access_token": access_token, "token_type": "bearer"}
 
 
 @router.post("/login")
-def login(request: Request, user_model: LoginModel):
+def login(request: Request, user_model: LoginModel, Authorize: AuthJWT = Depends()):
     user = User.get_by_email(user_model.email)
-    check_user(user_model, user)
-    access_token = create_access_token({"email": user.email})
-    response = JSONResponse(
-        None, status.HTTP_200_OK, {"Authorization": f"Bearer {access_token}"}
-    )
-    response.set_cookie(
-        "Authorization",
-        value=f"Bearer {access_token}",
-        domain=request.base_url.hostname,
-        httponly=True,
-        max_age=ACCESS_TOKEN_EXPIRE_MINUTES,
-    )
-    return response
+    if not user or not check_password(user_model.password, user.password):
+        http_auth_error = HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect email or password",
+            headers={"Authenticate": "Bearer"},
+        )
+        return http_auth_error
+    access_token = Authorize.create_access_token(subject=user.email)
+    Authorize.set_access_cookies(access_token)
+    return {"msg": "Successfully login"}
 
 
 @router.post("/register")
@@ -76,7 +82,6 @@ def activate_user(code: str):
 
 
 @router.post("/logout")
-def logout(request: Request):
-    response = JSONResponse(headers={"Authorization": ""})
-    response.delete_cookie("Authorization", domain=request.base_url.hostname)
-    return response
+def logout(Authorize: AuthJWT = Depends()):
+    Authorize.unset_jwt_cookies()
+    return {"msg": "Successfully logout"}

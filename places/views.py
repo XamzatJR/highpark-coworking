@@ -1,8 +1,8 @@
+from authentication.utils import AuthJWT
 from authentication.models import UserModel
-from authentication.utils import get_current_user
 from fastapi import APIRouter
 from fastapi.params import Depends
-from orm import Place, User
+from orm import Place
 
 from .models import DatePlacesModel, PlaceModel
 
@@ -28,5 +28,12 @@ def free_places(date_model: DatePlacesModel):
 
 
 @router.get("/profile")
-def profile(user: User = Depends(get_current_user)):
-    return UserModel(fullname=user.fullname, email=user.email, phone=user.phone)
+def profile(Authorize: AuthJWT = Depends()):
+    Authorize.jwt_required()
+
+    current_user = Authorize.get_user()
+    return UserModel(
+        fullname=current_user.fullname,
+        email=current_user.email,
+        phone=current_user.phone,
+    )
