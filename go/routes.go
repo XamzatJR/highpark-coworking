@@ -16,15 +16,7 @@ func faviconHandler(w http.ResponseWriter, r *http.Request) {
 func index(w http.ResponseWriter, r *http.Request) {
 	html, err := ioutil.ReadFile(htmlDir + "index.html")
 	if err != nil {
-		log.Fatalln(err)
-	}
-	fmt.Fprint(w, string(html))
-}
-
-func login(w http.ResponseWriter, r *http.Request) {
-	html, err := ioutil.ReadFile(htmlDir + "login.html")
-	if err != nil {
-		log.Fatalln(err)
+		log.Println(err)
 	}
 	fmt.Fprint(w, string(html))
 }
@@ -33,7 +25,8 @@ func dynamicTemplateHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	html, err := ioutil.ReadFile(htmlDir + vars["template"] + ".html")
 	if err != nil {
-		log.Fatalln(err)
+		log.Println(err)
+		custom404(w, r)
 	}
 	fmt.Fprint(w, string(html))
 }
@@ -54,4 +47,12 @@ func apiReverseProxy(w http.ResponseWriter, r *http.Request) {
 	}
 	r.Header.Add(cookie.Name, cookie.Value)
 	reverseProxy.ServeHTTP(w, r)
+}
+
+func custom404(w http.ResponseWriter, req *http.Request) {
+	html, err := ioutil.ReadFile(htmlDir + "404.html")
+	if err != nil {
+		log.Println(err)
+	}
+	fmt.Fprint(w, string(html))
 }
