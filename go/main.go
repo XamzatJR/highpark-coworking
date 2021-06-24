@@ -7,20 +7,28 @@ import (
 	"net/url"
 	"time"
 
+	"github.com/gbrlsnchs/jwt/v3"
 	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
 )
 
-var staticDir = "./static"
-var htmlDir = staticDir + "/html/"
-var origin, _ = url.Parse(Host())
-var path = "/api/*catchall"
-var reverseProxy = httputil.NewSingleHostReverseProxy(origin)
+var hs *jwt.HMACSHA
+var staticDir string
+var htmlDir string
+var origin *url.URL
+var path string
+var reverseProxy *httputil.ReverseProxy
 
 func init() {
 	if err := godotenv.Load(); err != nil {
-		log.Println("No .env file found")
+		log.Fatalln("No .env file found")
 	}
+	hs = jwt.NewHS256(SecretKey())
+	staticDir = "./static"
+	htmlDir = staticDir + "/html/"
+	origin, _ = url.Parse(Host())
+	path = "/api/*catchall"
+	reverseProxy = httputil.NewSingleHostReverseProxy(origin)
 }
 
 func main() {
@@ -45,5 +53,8 @@ func main() {
 		ReadTimeout:  15 * time.Second,
 	}
 
-	log.Fatal(server.ListenAndServe())
+	err := server.ListenAndServe()
+	if err != nil {
+		log.Fatal(err)
+	}
 }

@@ -14,7 +14,6 @@ func FaviconHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func Index(w http.ResponseWriter, r *http.Request) {
-	CheckJwt(w, r)
 	html, err := ioutil.ReadFile(htmlDir + "index.html")
 	if err != nil {
 		log.Println(err)
@@ -23,6 +22,10 @@ func Index(w http.ResponseWriter, r *http.Request) {
 }
 
 func Profile(w http.ResponseWriter, r *http.Request) {
+	result := CheckJwt(w, r)
+	if !result {
+		return
+	}
 	html, err := ioutil.ReadFile(htmlDir + "profile.html")
 	if err != nil {
 		log.Println(err)
@@ -42,19 +45,13 @@ func DynamicTemplateHandler(w http.ResponseWriter, r *http.Request) {
 
 func Logout(w http.ResponseWriter, r *http.Request) {
 	c := http.Cookie{
-		Name:   "Authorization",
+		Name:   "access_token_cookie",
 		MaxAge: -1}
 	http.SetCookie(w, &c)
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
 
 func ApiReverseProxy(w http.ResponseWriter, r *http.Request) {
-	cookie, err := r.Cookie("Authorization")
-	if err != nil {
-		reverseProxy.ServeHTTP(w, r)
-		return
-	}
-	r.Header.Add(cookie.Name, cookie.Value)
 	reverseProxy.ServeHTTP(w, r)
 }
 

@@ -3,7 +3,8 @@ module web
 go 1.13
 
 require (
-	github.com/gbrlsnchs/jwt/v3 v3.0.0 // indirect
+	github.com/dvsekhvalnov/jose2go v1.5.0 // indirect
+	github.com/gbrlsnchs/jwt/v3 v3.0.0
 	github.com/gorilla/mux v1.8.0
 	github.com/joho/godotenv v1.3.0
 	github.com/magefile/mage v1.11.0 // indirect

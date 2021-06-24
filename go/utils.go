@@ -10,8 +10,6 @@ import (
 	"github.com/gorilla/mux"
 )
 
-var hs = jwt.NewHS256([]byte(SecretKey()))
-
 type CustomPayload struct {
 	jwt.Payload
 	Email string `json:"email"`
@@ -35,18 +33,21 @@ func RequestLoggerMiddleware(r *mux.Router) mux.MiddlewareFunc {
 	}
 }
 
-func CheckJwt(w http.ResponseWriter, r *http.Request) {
+func CheckJwt(w http.ResponseWriter, r *http.Request) bool {
 	var pl CustomPayload
-	c, err := r.Cookie("Authorization")
+	c, err := r.Cookie("access_token_cookie")
 	if err != nil {
 		http.Redirect(w, r, "/login", http.StatusSeeOther)
+		return false
 	}
-	token := []byte(c.Value[7:])
+	token := []byte(c.Value)
 	hd, err := jwt.Verify(token, hs, &pl)
 	if err != nil {
+		log.Println(hd, err)
 		http.Redirect(w, r, "/login", http.StatusSeeOther)
+		return false
 	}
-	log.Println(hd)
+	return true
 }
 
 func Director(r *http.Request) {
@@ -71,12 +72,12 @@ func Host() string {
 	return val
 }
 
-func SecretKey() string {
-	val, ok := os.LookupEnv("secret_key")
+func SecretKey() []byte {
+	val, ok := os.LookupEnv("authjwt_secret_key")
 	if !ok {
-		log.Fatalln("Error: variable secret key not in .env")
+		log.Fatalln("Error: variable authjwt_secret_key not in .env")
 	}
-	return val
+	return []byte(val)
 }
 
 func SingleJoiningSlash(a, b string) string {

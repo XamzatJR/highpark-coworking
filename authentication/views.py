@@ -29,7 +29,7 @@ def token(user_model: LoginModel, Authorize: AuthJWT = Depends()):
             headers={"Authenticate": "Bearer"},
         )
         return http_auth_error
-    access_token = Authorize.create_access_token(subject=user.email)
+    access_token = Authorize.create_access_token(subject=user.email, expires_time=(60 * 60 * 24))
     return {"access_token": access_token, "token_type": "bearer"}
 
 
@@ -43,8 +43,8 @@ def login(request: Request, user_model: LoginModel, Authorize: AuthJWT = Depends
             headers={"Authenticate": "Bearer"},
         )
         return http_auth_error
-    access_token = Authorize.create_access_token(subject=user.email)
-    Authorize.set_access_cookies(access_token)
+    access_token = Authorize.create_access_token(subject=user.email, expires_time=(60 * 60 * 24))
+    Authorize.set_access_cookies(access_token, max_age=(60 * 60 * 24))
     return {"msg": "Successfully login"}
 
 
