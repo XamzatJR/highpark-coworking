@@ -85,3 +85,13 @@ def activate_user(code: str):
 def logout(Authorize: AuthJWT = Depends()):
     Authorize.unset_jwt_cookies()
     return {"msg": "Successfully logout"}
+
+
+@router.post("/verify")
+def verify(Authorize: AuthJWT = Depends()):
+    try:
+        Authorize.jwt_required()
+    except Exception:
+        return {"valid": False}
+    else:
+        return {"valid": True}

@@ -7,12 +7,10 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/gbrlsnchs/jwt/v3"
 	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
 )
 
-var hs *jwt.HMACSHA
 var staticDir string
 var htmlDir string
 var origin *url.URL
@@ -23,7 +21,6 @@ func init() {
 	if err := godotenv.Load(); err != nil {
 		log.Fatalln("No .env file found")
 	}
-	hs = jwt.NewHS256(SecretKey())
 	staticDir = "./static"
 	htmlDir = staticDir + "/html/"
 	origin, _ = url.Parse(Host())

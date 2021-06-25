@@ -1,18 +1,17 @@
 package main
 
 import (
+	"encoding/json"
 	"log"
 	"net/http"
 	"os"
 	"strings"
 
-	"github.com/gbrlsnchs/jwt/v3"
 	"github.com/gorilla/mux"
 )
 
-type CustomPayload struct {
-	jwt.Payload
-	Email string `json:"email"`
+type TokenVerify struct {
+	Valid bool `json:"valid"`
 }
 
 func RequestLoggerMiddleware(r *mux.Router) mux.MiddlewareFunc {
@@ -33,21 +32,31 @@ func RequestLoggerMiddleware(r *mux.Router) mux.MiddlewareFunc {
 	}
 }
 
-func CheckJwt(w http.ResponseWriter, r *http.Request) bool {
-	var pl CustomPayload
+func IsAuthenticated(w http.ResponseWriter, r *http.Request) bool {
 	c, err := r.Cookie("access_token_cookie")
 	if err != nil {
 		http.Redirect(w, r, "/login", http.StatusSeeOther)
 		return false
 	}
-	token := []byte(c.Value)
-	hd, err := jwt.Verify(token, hs, &pl)
-	if err != nil {
-		log.Println(hd, err)
-		http.Redirect(w, r, "/login", http.StatusSeeOther)
-		return false
+	cookie := &http.Cookie{
+		Name:   c.Name,
+		Value:  c.Value,
+		MaxAge: 300,
 	}
-	return true
+	req, err := http.NewRequest("POST", Host()+"/auth/verify", nil)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	req.AddCookie(cookie)
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	var result TokenVerify
+
+	json.NewDecoder(resp.Body).Decode(&result)
+	return result.Valid
 }
 
 func Director(r *http.Request) {
@@ -67,7 +76,7 @@ func Director(r *http.Request) {
 func Host() string {
 	val, ok := os.LookupEnv("api_host")
 	if !ok {
-		return "http://127.0.0.1:8000/"
+		return "http://127.0.0.1:8000"
 	}
 	return val
 }

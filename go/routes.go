@@ -22,8 +22,9 @@ func Index(w http.ResponseWriter, r *http.Request) {
 }
 
 func Profile(w http.ResponseWriter, r *http.Request) {
-	result := CheckJwt(w, r)
+	result := IsAuthenticated(w, r)
 	if !result {
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
 		return
 	}
 	html, err := ioutil.ReadFile(htmlDir + "profile.html")
