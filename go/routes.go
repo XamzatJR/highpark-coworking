@@ -1,24 +1,27 @@
 package main
 
 import (
-	"fmt"
-	"io/ioutil"
 	"log"
 	"net/http"
+	"path/filepath"
+	"text/template"
 
 	"github.com/gorilla/mux"
 )
 
 func FaviconHandler(w http.ResponseWriter, r *http.Request) {
-	http.ServeFile(w, r, staticDir+"/favicon.ico")
+	path := filepath.Join(staticDir, "favicon.ico")
+	http.ServeFile(w, r, path)
 }
 
 func Index(w http.ResponseWriter, r *http.Request) {
-	html, err := ioutil.ReadFile(htmlDir + "index.html")
+	path := filepath.Join(htmlDir, "index.html")
+	tmpl, _ := template.ParseFiles(path)
+
+	err := tmpl.Execute(w, nil)
 	if err != nil {
-		log.Println(err)
+		log.Panic(err.Error())
 	}
-	fmt.Fprint(w, string(html))
 }
 
 func Profile(w http.ResponseWriter, r *http.Request) {
@@ -27,21 +30,26 @@ func Profile(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/login", http.StatusSeeOther)
 		return
 	}
-	html, err := ioutil.ReadFile(htmlDir + "profile.html")
+	path := filepath.Join(htmlDir, "profile.html")
+	tmpl, _ := template.ParseFiles(path)
+
+	err := tmpl.Execute(w, nil)
 	if err != nil {
-		log.Println(err)
+		log.Println(err.Error())
+		NotFoundHandler(w, r)
 	}
-	fmt.Fprint(w, string(html))
 }
 
 func DynamicTemplateHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	html, err := ioutil.ReadFile(htmlDir + vars["template"] + ".html")
+	path := filepath.Join(htmlDir, vars["template"]+".html")
+	tmpl, _ := template.ParseFiles(path)
+
+	err := tmpl.Execute(w, nil)
 	if err != nil {
-		log.Println(err)
-		Custom404(w, r)
+		log.Println(err.Error())
+		NotFoundHandler(w, r)
 	}
-	fmt.Fprint(w, string(html))
 }
 
 func Logout(w http.ResponseWriter, r *http.Request) {
@@ -56,10 +64,8 @@ func ApiReverseProxy(w http.ResponseWriter, r *http.Request) {
 	reverseProxy.ServeHTTP(w, r)
 }
 
-func Custom404(w http.ResponseWriter, req *http.Request) {
-	html, err := ioutil.ReadFile(htmlDir + "404.html")
-	if err != nil {
-		log.Println(err)
-	}
-	fmt.Fprint(w, string(html))
+func NotFoundHandler(w http.ResponseWriter, req *http.Request) {
+	path := filepath.Join(htmlDir, "404.html")
+	tmpl, _ := template.ParseFiles(path)
+	_ = tmpl.Execute(w, nil)
 }

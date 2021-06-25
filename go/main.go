@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"net/http/httputil"
 	"net/url"
+	"path/filepath"
 	"time"
 
 	"github.com/gorilla/mux"
@@ -21,8 +22,8 @@ func init() {
 	if err := godotenv.Load(); err != nil {
 		log.Fatalln("No .env file found")
 	}
-	staticDir = "./static"
-	htmlDir = staticDir + "/html/"
+	staticDir = "static"
+	htmlDir = filepath.Join(staticDir, "html")
 	origin, _ = url.Parse(Host())
 	path = "/api/*catchall"
 	reverseProxy = httputil.NewSingleHostReverseProxy(origin)
@@ -30,7 +31,7 @@ func init() {
 
 func main() {
 	router := mux.NewRouter()
-	router.NotFoundHandler = http.HandlerFunc(Custom404)
+	router.NotFoundHandler = http.HandlerFunc(NotFoundHandler)
 	reverseProxy.Director = Director
 
 	router.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir(staticDir))))
