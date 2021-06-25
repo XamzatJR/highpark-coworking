@@ -54,6 +54,6 @@ class TokenModel(BaseModel):
 
 
 class UserModel(BaseModel):
-    fullname: str
-    email: str
-    phone: str
+    fullname: Optional[str]
+    email: Optional[str]
+    phone: Optional[str]

@@ -55,6 +55,11 @@ class BaseModel(Model):
         self.updated_at = datetime.now()
         return super().save(force_insert=force_insert, only=only)
 
+    def update_by_dict(self, data: dict):
+        for key in data:
+            setattr(self, key, data[key])
+        self.save()
+
 
 class User(BaseModel):
     fullname = CharField()
