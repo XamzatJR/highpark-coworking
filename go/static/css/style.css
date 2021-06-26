@@ -291,6 +291,32 @@ body {
     font-size: 30px;
     line-height: 70px;
   }
+
+  .box {
+    padding-left: 5%;
+    padding-top: 10em;
+    padding-bottom: 15.4em;
+  }
+
+  .box img {
+    width: 150px;
+    height: 150px;
+    border-radius: 5%;
+    float: left;
+  }
+
+  .box a {
+    width: 150px;
+    height: 100px;
+    display: block;
+    clear: left;
+  }
+
+  .information {
+    margin-left: 160px;
+    display: block;
+    position: absolute;
+  }
 }
 
 .box {
