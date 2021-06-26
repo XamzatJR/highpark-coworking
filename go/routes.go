@@ -9,6 +9,10 @@ import (
 	"github.com/gorilla/mux"
 )
 
+type RequestData struct {
+	Authenticated bool
+}
+
 func FaviconHandler(w http.ResponseWriter, r *http.Request) {
 	path := filepath.Join(staticDir, "favicon.ico")
 	http.ServeFile(w, r, path)
@@ -18,14 +22,15 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	path := filepath.Join(htmlDir, "index.html")
 	tmpl, _ := template.ParseFiles(path)
 
-	err := tmpl.Execute(w, nil)
+	data := RequestData{IsAuthenticated(r)}
+	err := tmpl.Execute(w, data)
 	if err != nil {
 		log.Panic(err.Error())
 	}
 }
 
 func Profile(w http.ResponseWriter, r *http.Request) {
-	result := IsAuthenticated(w, r)
+	result := IsAuthenticated(r)
 	if !result {
 		http.Redirect(w, r, "/login", http.StatusSeeOther)
 		return
@@ -33,7 +38,8 @@ func Profile(w http.ResponseWriter, r *http.Request) {
 	path := filepath.Join(htmlDir, "profile.html")
 	tmpl, _ := template.ParseFiles(path)
 
-	err := tmpl.Execute(w, nil)
+	data := RequestData{IsAuthenticated(r)}
+	err := tmpl.Execute(w, data)
 	if err != nil {
 		log.Println(err.Error())
 		NotFoundHandler(w, r)
@@ -43,19 +49,20 @@ func Profile(w http.ResponseWriter, r *http.Request) {
 func DynamicTemplateHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	if vars["template"] == "login" {
-		if IsAuthenticated(w, r) {
+		if IsAuthenticated(r) {
 			http.Redirect(w, r, "/profile", http.StatusSeeOther)
 			return
 		}
 	}
 	path := filepath.Join(htmlDir, vars["template"]+".html")
-	tmpl, _ := template.ParseFiles(path)
-
-	err := tmpl.Execute(w, nil)
+	tmpl, err := template.ParseFiles(path)
 	if err != nil {
 		log.Println(err.Error())
 		NotFoundHandler(w, r)
 	}
+
+	data := RequestData{IsAuthenticated(r)}
+	tmpl.Execute(w, data)
 }
 
 func Logout(w http.ResponseWriter, r *http.Request) {
@@ -70,7 +77,7 @@ func ApiReverseProxy(w http.ResponseWriter, r *http.Request) {
 	reverseProxy.ServeHTTP(w, r)
 }
 
-func NotFoundHandler(w http.ResponseWriter, req *http.Request) {
+func NotFoundHandler(w http.ResponseWriter, r *http.Request) {
 	path := filepath.Join(htmlDir, "404.html")
 	tmpl, _ := template.ParseFiles(path)
 	_ = tmpl.Execute(w, nil)

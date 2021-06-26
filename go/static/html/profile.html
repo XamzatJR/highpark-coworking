@@ -14,13 +14,20 @@
 <body>
   <div class="navbar">
     <ul>
+      {{if .Authenticated}}
+      <li><a href="/logout">Выйти</a></li>
+      <li><a href="/profile">Профиль</a></li>
+      {{else}}
       <li><a href="/login">Войти</a></li>
+      <li><a href="/register">Регистрация</a></li>
+      {{end}}
       <li><a href="/contacts">Контакты</a></li>
       <li><a href="/rules">Правила</a></li>
       <li><a href="/time">Время работы</a></li>
       <li><a href="/about">О нас</a></li>
       <li><a href="/">Главная</a></li>
     </ul>
+  </div>
   </div>
   <div class="box">
     <div class="information">
@@ -30,8 +37,30 @@
       <h4 id="phone">Телефон: </h4>
     </div>
     <img class="mb-4" src="/static/images/userpic.png">
-    <a class="btn btn-primary order-btn" href="#">Редактировать профиль</a>
-    <a class="btn btn-primary order-btn mt-3" href="#">Мои заказы</a>
+    <a class="btn btn-primary order-btn" id="edit">Редактировать профиль</a>
+    <a class="btn btn-primary order-btn mt-3">Мои заказы</a>
+
+    <div class="modal fade" id="editProfile" tabindex="-1" aria-labelledby="editProfile" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="editProfile">Изменить профиль</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="mb-3">
+              <label for="fullnameFormField" class="form-label">Имя пользователя</label>
+              <input type="text" class="form-control" id="fullnameFormField" placeholder="username">
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+            <button type="button" class="btn btn-primary" id="saveEdit">Сохранить</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
   <footer class="footer mt-auto py-3 footer-custom sticky-bottom">
     <div class="container">
@@ -48,10 +77,29 @@
       </div>
     </div>
   </footer>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
   <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script src="/static/javascript/auth.js"></script>
   <script>
+    const editModal = new bootstrap.Modal(document.getElementById('editProfile'))
+
+    $("#edit").click((e) => {
+      axios.get('/api/profile').then((response) => {
+        $("#fullnameFormField").val(response.data.fullname)
+      })
+      editModal.show()
+    })
+
+    $("#saveEdit").click((e) => {
+      axios
+        .patch('/api/profile', { fullname: $("#fullnameFormField").val() })
+        .then((response) => {
+          $("#fullname").text(response.data.fullname)
+          editModal.hide()
+        })
+    })
+
     $(document).ready(() => {
       axios.get('/api/profile').then((response) => {
         $("#fullname").text(response.data.fullname)

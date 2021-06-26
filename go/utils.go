@@ -32,7 +32,7 @@ func RequestLoggerMiddleware(r *mux.Router) mux.MiddlewareFunc {
 	}
 }
 
-func IsAuthenticated(w http.ResponseWriter, r *http.Request) bool {
+func IsAuthenticated(r *http.Request) bool {
 	c, err := r.Cookie("access_token_cookie")
 	if err != nil {
 		return false

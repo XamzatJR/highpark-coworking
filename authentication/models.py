@@ -57,3 +57,6 @@ class UserModel(BaseModel):
     fullname: Optional[str]
     email: Optional[str]
     phone: Optional[str]
+
+    def only_fullname(self):
+        return UserModel(fullname=self.fullname)

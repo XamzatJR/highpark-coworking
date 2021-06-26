@@ -12,16 +12,22 @@
 </head>
 
 <body>
-<div class="navbar">
+  <div class="navbar">
     <ul>
-      <li><a href="/login">Войти</a></li>
+      {{if .Authenticated}}
+        <li><a href="/logout">Выйти</a></li>
+        <li><a href="/profile">Профиль</a></li>
+      {{else}}
+        <li><a href="/login">Войти</a></li>
+        <li><a href="/register">Регистрация</a></li>
+      {{end}}
       <li><a href="/contacts">Контакты</a></li>
       <li><a href="/rules">Правила</a></li>
       <li><a href="/time">Время работы</a></li>
       <li><a href="/about">О нас</a></li>
       <li><a href="/">Главная</a></li>
     </ul>
-</div>
+  </div>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
 <script src="/static/javascript/auth.js"></script>
 </body>

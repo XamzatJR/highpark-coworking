@@ -28,7 +28,7 @@ def token(user_model: LoginModel, Authorize: AuthJWT = Depends()):
             detail="Incorrect email or password",
             headers={"Authenticate": "Bearer"},
         )
-        return http_auth_error
+        raise http_auth_error
     access_token = Authorize.create_access_token(
         subject=user.email, expires_time=(60 * 60 * 24)
     )
@@ -44,7 +44,7 @@ def login(request: Request, user_model: LoginModel, Authorize: AuthJWT = Depends
             detail="Incorrect email or password",
             headers={"Authenticate": "Bearer"},
         )
-        return http_auth_error
+        raise http_auth_error
     access_token = Authorize.create_access_token(
         subject=user.email, expires_time=(60 * 60 * 24)
     )

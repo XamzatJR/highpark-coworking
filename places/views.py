@@ -43,14 +43,6 @@ def profile(Authorize: AuthJWT = Depends()):
 def profile_update(data: UserModel, Authorize: AuthJWT = Depends()):
     Authorize.jwt_required()
 
-    data = data.dict(exclude_unset=True)
-    user = Authorize.get_user().update_by_dict()
-    access_token = Authorize.create_access_token(
-        subject=user.email, expires_time=(60 * 60 * 24)
-    )
-    Authorize.set_access_cookies(access_token, max_age=(60 * 60 * 24))
-    return UserModel(
-        fullname=user.fullname,
-        email=user.email,
-        phone=user.phone,
-    )
+    data = data.only_fullname().dict(exclude_unset=True)
+    Authorize.get_user().update_by_dict(data)
+    return data
