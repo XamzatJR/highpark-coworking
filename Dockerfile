@@ -4,7 +4,9 @@ RUN apt update && apt upgrade -y && pip3 install pipenv
 
 COPY . .
 
-RUN pip3 install -r requirements.txt
+RUN pip3 install poetry
+
+RUN poetry install --no-dev
 
 RUN chmod +x fastapirun.sh
 

@@ -12,6 +12,6 @@ email_from={{gmail}}
 email_password={{gmail password}}
 
 db_name={{psql database name}}
-db_user={{psql database username}}
-db_password={{psql database user password}}
+db_user={{psql username}}
+db_password={{psql user password}}
 ```
