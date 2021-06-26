@@ -5,8 +5,8 @@ from pydantic import BaseModel
 
 
 class DatePlacesModel(BaseModel):
-    start: date
-    end: date
+    start: Optional[date] = None
+    end: Optional[date] = None
 
 
 class PlaceModel(BaseModel):

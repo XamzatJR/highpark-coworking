@@ -48,11 +48,9 @@ func Profile(w http.ResponseWriter, r *http.Request) {
 
 func DynamicTemplateHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	if vars["template"] == "login" {
-		if IsAuthenticated(r) {
-			http.Redirect(w, r, "/profile", http.StatusSeeOther)
-			return
-		}
+	if (vars["template"] == "login" || vars["template"] == "register") && IsAuthenticated(r) {
+		http.Redirect(w, r, "/profile", http.StatusSeeOther)
+		return
 	}
 	path := filepath.Join(htmlDir, vars["template"]+".html")
 	tmpl, err := template.ParseFiles(path)

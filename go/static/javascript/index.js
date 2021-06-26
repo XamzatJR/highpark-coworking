@@ -2,8 +2,6 @@ const phoneMask = IMask(document.getElementById("phone-number"), {
   mask: "+{7}(000)000-00-00",
 });
 
-let period;
-
 $("#displayService").click(function (e) {
   $("#service").removeClass("hero-disabled");
 });
@@ -19,5 +17,5 @@ $("#displayDateMonthly").click(function (e) {
 });
 
 $("#displayLogin").click(function (e) {
-  $("#login").removeClass("hero-disabled");
+  $("#loginHero").removeClass("hero-disabled");
 });

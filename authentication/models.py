@@ -34,7 +34,7 @@ class RegisterModel(BaseModel):
             raise ValidationError("Phone number not valid")
         if not re.match(r"(8|7)(\d{3})(\d{7})", phone):
             raise ValidationError("Phone number not valid")
-        return phone
+        return "7" + phone[1:]
 
     @validator("password")
     def password_validator(cls, password: str):

@@ -1,6 +1,3 @@
-let start_g;
-let end_g;
-
 $(function () {
   let tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);

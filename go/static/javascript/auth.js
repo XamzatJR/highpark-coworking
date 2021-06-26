@@ -1,3 +1,7 @@
+let start_g = null;
+let end_g = null;
+let period;
+
 const info = (message) =>
   `<div class="alert alert-primary mt-3" role="alert">${message}</div>`;
 
@@ -33,9 +37,9 @@ $("#register").submit(function (e) {
       email: email,
       phone: phoneNumber,
       password: password,
-      date: { start: start_g | null, end: end_g | null },
-      places: places ?? [],
-      period: period ?? null,
+      date: { start: start_g, end: end_g | null },
+      places: places,
+      period: period,
     })
     .then(function (response) {
       $("#register").append(
