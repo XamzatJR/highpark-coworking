@@ -10,21 +10,32 @@ router = APIRouter(tags=["Places"])
 
 
 @router.post("/free-places")
-def free_places(date_model: DatePlacesModel):
-    query = Place.select().where(
-        (Place.paid_for == True)  # noqa: E712
-        & (
-            (date_model.start <= Place.start <= date_model.end)
-            or (date_model.start <= Place.end <= date_model.end)
-        )
+def free_places(date_model: DatePlacesModel, Authorize: AuthJWT = Depends()):
+    places: list[Place]
+    user_places: list[Place] = []
+    date_condition = (date_model.start <= Place.start <= date_model.end) or (
+        date_model.start <= Place.end <= date_model.end
     )
-    places = [
-        PlaceModel(place=place.place, start=place.start, end=place.end)
-        for place in query
-        if (date_model.start <= place.start <= date_model.end)
-        or (date_model.start <= place.end <= date_model.end)
-    ]
-    return {"places": places}
+    try:
+        Authorize.jwt_required()
+    except Exception:
+        pass
+    else:
+        user_places = Place.select().where(
+            (Place.user == Authorize.get_user().id) & date_condition
+        )
+    places = Place.select().where(
+        (Place.paid_for == True) & date_condition  # noqa: E712
+    )
+    return {
+        "places": [
+            PlaceModel(place=place.place, start=place.start, end=place.end)
+            for place in places
+            if date_condition
+        ],
+        "paid_for": [place for place in user_places if place.paid_for],
+        "not_paid_for": [place for place in user_places if not place.paid_for],
+    }
 
 
 @router.get("/profile")
