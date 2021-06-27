@@ -13,3 +13,7 @@ class PlaceModel(BaseModel):
     place: int
     start: Optional[date]
     end: Optional[date]
+
+    @classmethod
+    def orm(cls, model):
+        return cls(place=model.place, start=model.start, end=model.end)

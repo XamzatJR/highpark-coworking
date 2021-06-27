@@ -1,3 +1,9 @@
+const placePopover = (title, start, end) => ({
+  trigger: "hover",
+  title: title,
+  content: `${start.replace(/-/g, ".")} - ${end.replace(/-/g, ".")}`,
+});
+
 $(function () {
   let tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);
@@ -38,12 +44,15 @@ $(function () {
     function (start, end, label) {
       $(".marked").removeClass("marked");
       $(".occupied").removeClass("occupied");
+
       start = `${start._d.getFullYear()}-${
         start._d.getMonth() + 1
       }-${start._d.getDate()}`;
+
       end = `${end._d.getFullYear()}-${
         end._d.getMonth() + 1
       }-${end._d.getDate()}`;
+
       start_g = start;
       end_g = end;
       axios
@@ -52,18 +61,41 @@ $(function () {
           $(".chair-h").addClass("free");
           $(".chair-h2").addClass("free");
           $(".chair-v").addClass("free");
+          for (let index = 1; index < 33; index++) {
+            const el = $(`#${index}`);
+            el.popover("dispose");
+          }
+
           response.data.places.forEach((element) => {
             const el = $(`#${element.place}`);
             el.removeClass("free").addClass("occupied");
-            el.popover({
-              trigger: "hover",
-              title: "Дата аренды",
-              content: `${element.start.replace(
-                /-/g,
-                "."
-              )} - ${element.end.replace(/-/g, ".")}`,
-            });
+            el.popover(placePopover("Дата аренды", element.start, element.end));
           });
+
+          response.data.paid_for.forEach((element) => {
+            const el = $(`#${element.place}`);
+            el.removeClass("free").addClass("marked");
+            el.popover(
+              placePopover(
+                "Вы арендовали - оплачено",
+                element.start,
+                element.end
+              )
+            );
+          });
+
+          response.data.not_paid_for.forEach((element) => {
+            const el = $(`#${element.place}`);
+            el.removeClass("free").addClass("marked");
+            el.popover(
+              placePopover(
+                "Вы арендовали - не оплачено",
+                element.start,
+                element.end
+              )
+            );
+          });
+
           $("#tables").removeClass("hero-disabled");
           window.location.href = "#tables";
         })

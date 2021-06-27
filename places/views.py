@@ -1,3 +1,4 @@
+from datetime import timedelta
 from authentication.utils import AuthJWT
 from authentication.models import UserModel
 from fastapi import APIRouter
@@ -13,28 +14,29 @@ router = APIRouter(tags=["Places"])
 def free_places(date_model: DatePlacesModel, Authorize: AuthJWT = Depends()):
     places: list[Place]
     user_places: list[Place] = []
-    date_condition = (date_model.start <= Place.start <= date_model.end) or (
-        date_model.start <= Place.end <= date_model.end
-    )
+
+    days = (date_model.end - date_model.start).days + 2
+    date_model.start -= timedelta(1)
+    date_list = [date_model.start + timedelta(days=x) for x in range(days)]
+    date_condition = Place.start.in_(date_list) or Place.end.in_(date_list)
     try:
         Authorize.jwt_required()
+        user = Authorize.get_user().id
     except Exception:
-        pass
+        user = None
     else:
-        user_places = Place.select().where(
-            (Place.user == Authorize.get_user().id) & date_condition
-        )
+        user_places = Place.select().where((Place.user == user) & date_condition)
     places = Place.select().where(
-        (Place.paid_for == True) & date_condition  # noqa: E712
+        (Place.paid_for == True) & (Place.user != user) & date_condition  # noqa: E712
     )
     return {
-        "places": [
-            PlaceModel(place=place.place, start=place.start, end=place.end)
-            for place in places
-            if date_condition
+        "places": [PlaceModel.orm(place) for place in places if date_condition],
+        "paid_for": [
+            PlaceModel.orm(place) for place in user_places if place.paid_for is True
         ],
-        "paid_for": [place for place in user_places if place.paid_for],
-        "not_paid_for": [place for place in user_places if not place.paid_for],
+        "not_paid_for": [
+            PlaceModel.orm(place) for place in user_places if place.paid_for is False
+        ],
     }
 
 
