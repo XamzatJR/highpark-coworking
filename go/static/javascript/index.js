@@ -1,17 +1,26 @@
-$("#displayService").click(function (e) {
-  $("#service").removeClass("hero-disabled");
-});
+$("#displayLoginForm").click((e) => {
+  e.preventDefault()
+  $(this).parent(".registration-form").hide()
+  $("#displayRegisterForm").parent(".registration-form").show()
+})
 
-$("#displayDateDaily").click(function (e) {
+
+$("#displayRegisterForm").click((e) => {
+  e.preventDefault()
+  $(this).parent(".registration-form").hide()
+  $("#displayLoginForm").parent(".registration-form").show()
+})
+
+$("#displayService").click((e) => $("#service").removeClass("hero-disabled"))
+
+$("#displayDateDaily").click((e)  => {
   $("#date").removeClass("hero-disabled");
   period = "day";
 });
 
-$("#displayDateMonthly").click(function (e) {
+$("#displayDateMonthly").click((e) => {
   $("#date").removeClass("hero-disabled");
   period = "month";
 });
 
-$("#displayLogin").click(function (e) {
-  $("#loginHero").removeClass("hero-disabled");
-});
+$("#displayLogin").click((e) => $("#loginHero").removeClass("hero-disabled"));

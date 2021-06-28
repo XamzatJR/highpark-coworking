@@ -181,10 +181,14 @@ body {
 }
 
 .free:hover {
-  background-color: green;
+  background-color: darkcyan;
 }
 
-.marked {
+.not-paid {
+  background-color: darkcyan;
+}
+
+.paid {
   background-color: green;
 }
 

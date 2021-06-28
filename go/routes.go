@@ -72,6 +72,7 @@ func Logout(w http.ResponseWriter, r *http.Request) {
 }
 
 func ApiReverseProxy(w http.ResponseWriter, r *http.Request) {
+	r.Header.Add("X-Sender", "golangserver")
 	reverseProxy.ServeHTTP(w, r)
 }
 

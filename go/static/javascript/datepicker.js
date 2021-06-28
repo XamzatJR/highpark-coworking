@@ -42,7 +42,8 @@ $(function () {
       },
     },
     function (start, end, label) {
-      $(".marked").removeClass("marked");
+      $(".paid").removeClass("paid");
+      $(".not-paid").removeClass("not-paid");
       $(".occupied").removeClass("occupied");
 
       start = `${start._d.getFullYear()}-${
@@ -74,7 +75,7 @@ $(function () {
 
           response.data.paid_for.forEach((element) => {
             const el = $(`#${element.place}`);
-            el.removeClass("free").addClass("marked");
+            el.removeClass("free").addClass("paid");
             el.popover(
               placePopover(
                 "Вы арендовали - оплачено",
@@ -86,7 +87,7 @@ $(function () {
 
           response.data.not_paid_for.forEach((element) => {
             const el = $(`#${element.place}`);
-            el.removeClass("free").addClass("marked");
+            el.removeClass("free").addClass("not-paid");
             el.popover(
               placePopover(
                 "Вы арендовали - не оплачено",
@@ -107,5 +108,5 @@ $(function () {
 });
 
 $("body").on("click", ".free", function () {
-  $(this).toggleClass("marked");
+  $(this).toggleClass("not-paid");
 });

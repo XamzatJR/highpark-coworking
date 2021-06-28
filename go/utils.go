@@ -43,6 +43,7 @@ func IsAuthenticated(r *http.Request) bool {
 		MaxAge: 300,
 	}
 	req, err := http.NewRequest("POST", Host()+"/auth/verify", nil)
+	req.Header.Add("X-Sender", "golangserver")
 	if err != nil {
 		log.Fatalln(err)
 	}
