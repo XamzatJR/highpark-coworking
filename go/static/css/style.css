@@ -327,20 +327,10 @@ body {
 }
 
 .box img {
-  width: 250px;
-  height: 250px;
   border-radius: 5%;
-  float: left;
 }
 
 .box a {
-  width: 250px;
   display: block;
   clear: left;
-}
-
-.information {
-  margin-left: 300px;
-  display: block;
-  position: absolute;
 }

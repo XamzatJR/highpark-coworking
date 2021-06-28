@@ -132,10 +132,10 @@
                     <div class="chair-v mt-3 mb-5" id="19"></div>
                     <div class="chair-v mt-3 mb-5" id="20"></div>
                   </div>
-                  <div class="col-3">
+                  <div class="col-4">
                     <div class="table-v"></div>
                   </div>
-                  <div class="col-2">
+                  <div class="col-1">
                     <div class="chair-v mt-3 mb-5" id="21"></div>
                     <div class="chair-v mt-3 mb-5" id="22"></div>
                     <div class="chair-v mt-3 mb-5" id="23"></div>
@@ -151,10 +151,10 @@
                     <div class="chair-v mt-3 mb-5" id="27"></div>
                     <div class="chair-v mt-3 mb-5" id="28"></div>
                   </div>
-                  <div class="col-3">
+                  <div class="col-4">
                     <div class="table-v"></div>
                   </div>
-                  <div class="col-2">
+                  <div class="col-1">
                     <div class="chair-v mt-3 mb-5" id="29"></div>
                     <div class="chair-v mt-3 mb-5" id="30"></div>
                     <div class="chair-v mt-3 mb-5" id="31"></div>
@@ -265,6 +265,13 @@
   <script src="/static/javascript/auth.js"></script>
   <script src="/static/javascript/index.js"></script>
   <script src="/static/javascript/datepicker.js"></script>
+  {{if not .Authenticated}}
+  <script>
+    const phoneMask = IMask(document.getElementById("phone-number"), {
+      mask: "+{7}(000)000-00-00",
+    });
+  </script>
+  {{end}}
 </body>
 
 </html>
