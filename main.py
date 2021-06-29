@@ -2,7 +2,6 @@ from fastapi import FastAPI, Request, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from fastapi_jwt_auth.exceptions import AuthJWTException
-from pydantic.errors import JsonError
 
 from authentication.views import router as authentication
 from orm import create_tables
@@ -29,6 +28,13 @@ if settings().debug:
         allow_methods=["*"],
         allow_headers=["*"],
     )
+else:
+    @app.middleware("http")
+    async def add_process_time_header(request: Request, call_next):
+        if request.headers.get("X-Sender") == "golangserver":
+            response = await call_next(request)
+            return response
+        return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST)
 
 
 @app.on_event("startup")
@@ -39,14 +45,6 @@ def startup():
 @app.exception_handler(AuthJWTException)
 def authjwt_exception_handler(request: Request, exc: AuthJWTException):
     return JSONResponse(status_code=exc.status_code, content={"detail": exc.message})
-
-
-@app.middleware("http")
-async def add_process_time_header(request: Request, call_next):
-    if request.headers.get("X-Sender") == "golangserver":
-        response = await call_next(request)
-        return response
-    return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST)
 
 
 app.include_router(authentication)
