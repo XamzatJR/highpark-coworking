@@ -59,3 +59,25 @@ def profile_update(data: UserModel, Authorize: AuthJWT = Depends()):
     data = data.only_fullname().dict(exclude_unset=True)
     Authorize.get_user().update_by_dict(data)
     return data
+
+
+@router.get("/cart")
+def cart(Authorize: AuthJWT = Depends()):
+    try:
+        Authorize.jwt_required()
+    except Exception:
+        return {"cart": []}
+    else:
+        user = Authorize.get_user()
+        query = Place.select().where(
+            (Place.user == user.id) and (Place.paid_for == False)  # noqa: E712
+        )
+        return {"cart": [PlaceModel.orm(place) for place in query]}
+
+
+@router.post("/cart/add")
+def cart_add(place: PlaceModel, Authorize: AuthJWT = Depends()):
+    Authorize.jwt_required()
+    user = Authorize.get_user()
+    place = Place.create(user=user, **place.dict())
+    return {"in_cart": True}
