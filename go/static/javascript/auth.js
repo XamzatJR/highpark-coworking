@@ -38,8 +38,6 @@ $("#register").submit(function (e) {
     price = 300
   }
 
-  console.log(end_g)
-
   axios
     .post("/api/auth/register", {
       fullname: username,

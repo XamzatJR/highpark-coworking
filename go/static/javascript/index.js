@@ -9,6 +9,7 @@ $("#displayDateDaily").click((e) => {
 $("#displayDateMonthly").click((e) => {
   $("#date").removeClass("hero-disabled");
   period = "month";
+  $("#displayTables").removeAttr("style")
   daterangeMonth();
 });
 
