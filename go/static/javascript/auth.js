@@ -1,6 +1,6 @@
 let start_g = null;
 let end_g = null;
-let period;
+let period = null;
 
 const info = (message) =>
   `<div class="alert alert-primary mt-3" role="alert">${message}</div>`;
@@ -26,10 +26,19 @@ $("#register").submit(function (e) {
   const phoneNumber = $("#phone-number").val();
   const password = $("#password").val();
   let places = [];
+  let price = null
 
-  $(".marked").each(function () {
+  $(".not-paid").each(function () {
     places.push({ place: this.id });
   });
+
+  if (period == "month") {
+    price = 5000
+  } else if (period == "day") {
+    price = 300
+  }
+
+  console.log(end_g)
 
   axios
     .post("/api/auth/register", {
@@ -37,9 +46,10 @@ $("#register").submit(function (e) {
       email: email,
       phone: phoneNumber,
       password: password,
-      date: { start: start_g, end: end_g | null },
+      date: { start: start_g, end: end_g },
       places: places,
       period: period,
+      price: price
     })
     .then(function (response) {
       $("#register").append(

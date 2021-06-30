@@ -14,6 +14,7 @@ class RegisterModel(BaseModel):
     date: Optional[DatePlacesModel] = None
     places: Optional[list[PlaceModel]] = None
     period: Optional[str] = None
+    price: Optional[int] = None
 
     def exclude_password(self):
         model = self

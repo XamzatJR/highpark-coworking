@@ -1,4 +1,4 @@
-from places.utils import get_date_range
+from places.utils import get_date_range, is_occupied
 from authentication.utils import AuthJWT
 from authentication.models import UserModel
 from fastapi import APIRouter
@@ -77,10 +77,21 @@ def cart(Authorize: AuthJWT = Depends()):
 def cart_add(place: PlaceModel, Authorize: AuthJWT = Depends()):
     Authorize.jwt_required()
     user = Authorize.get_user()
-    place = Place.create(user=user, **place.dict())
-    return {"in_cart": True}
+    date_list = get_date_range(place)
+    places = Place.select().where(
+        (Place.paid_for == True)  # noqa: E712
+        & (Place.start.in_(date_list) or Place.end.in_(date_list))
+    )
+    if is_occupied(places, place):
+        place = Place.create(user=user, **place.dict())
+        return {"in_cart": True}
+    return {"in_cart": False}
 
 
 @router.delete("/cart/detele")
 def cart_delete(place: PlaceModel, Authorize: AuthJWT = Depends()):
-    pass
+    if place.start is None or place.end is None:
+        return {"removed": False}
+    id_ = Place.get(**place.dict())
+    Place.delete_by_id(id_)
+    return {"removed": True}
