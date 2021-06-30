@@ -5,34 +5,42 @@ import (
 	"net/http"
 	"net/http/httputil"
 	"net/url"
+	"path/filepath"
 	"time"
 
 	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
 )
 
-var staticDir = "./static"
-var htmlDir = staticDir + "/html/"
-var origin, _ = url.Parse(host())
-var path = "/api/*catchall"
-var reverseProxy = httputil.NewSingleHostReverseProxy(origin)
+var staticDir string
+var htmlDir string
+var origin *url.URL
+var path string
+var reverseProxy *httputil.ReverseProxy
 
 func init() {
 	if err := godotenv.Load(); err != nil {
-		log.Println("No .env file found")
+		log.Fatalln("No .env file found")
 	}
+	staticDir = "static"
+	htmlDir = filepath.Join(staticDir, "html")
+	origin, _ = url.Parse(Host())
+	path = "/api/*catchall"
+	reverseProxy = httputil.NewSingleHostReverseProxy(origin)
 }
 
 func main() {
 	router := mux.NewRouter()
-
+	router.NotFoundHandler = http.HandlerFunc(NotFoundHandler)
 	reverseProxy.Director = Director
 
 	router.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir(staticDir))))
-	router.HandleFunc("/", index)
-	router.HandleFunc("/login", login)
-	router.HandleFunc("/logout", logout)
-	router.PathPrefix("/api/").HandlerFunc(apiReverseProxy)
+	router.HandleFunc("/favicon.ico", FaviconHandler)
+	router.HandleFunc("/", Index)
+	router.HandleFunc("/profile", Profile)
+	router.HandleFunc("/logout", Logout)
+	router.HandleFunc("/{template}", DynamicTemplateHandler)
+	router.PathPrefix("/api/").HandlerFunc(ApiReverseProxy)
 
 	router.Use(RequestLoggerMiddleware(router))
 
@@ -43,5 +51,8 @@ func main() {
 		ReadTimeout:  15 * time.Second,
 	}
 
-	log.Fatal(server.ListenAndServe())
+	err := server.ListenAndServe()
+	if err != nil {
+		log.Fatal(err)
+	}
 }

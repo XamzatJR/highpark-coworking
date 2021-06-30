@@ -10,7 +10,7 @@ body {
 
   top: 0;
   padding-top: 3em;
-  padding-left: 56em;
+  padding-left: 38%;
   position: fixed;
 
   transition: all 0.3s ease;
@@ -44,7 +44,7 @@ body {
 .navbar-scroll {
   background-color: #34547a;
   padding-top: 1em;
-  padding-left: 30em;
+  padding-left: 15%;
 }
 
 .navbar-scroll ul li {
@@ -181,10 +181,14 @@ body {
 }
 
 .free:hover {
-  background-color: green;
+  background-color: darkcyan;
 }
 
-.marked {
+.not-paid {
+  background-color: darkcyan;
+}
+
+.paid {
   background-color: green;
 }
 
@@ -291,6 +295,32 @@ body {
     font-size: 30px;
     line-height: 70px;
   }
+
+  .box {
+    padding-left: 5%;
+    padding-top: 10em;
+    padding-bottom: 15.4em;
+  }
+
+  .box img {
+    width: 150px;
+    height: 150px;
+    border-radius: 5%;
+    float: left;
+  }
+
+  .box a {
+    width: 150px;
+    height: 100px;
+    display: block;
+    clear: left;
+  }
+
+  .information {
+    margin-left: 160px;
+    display: block;
+    position: absolute;
+  }
 }
 
 .box {
@@ -301,20 +331,10 @@ body {
 }
 
 .box img {
-  width: 250px;
-  height: 250px;
   border-radius: 5%;
-  float: left;
 }
 
 .box a {
-  width: 250px;
   display: block;
   clear: left;
-}
-
-.information {
-  margin-left: 300px;
-  display: block;
-  position: absolute;
 }

@@ -28,6 +28,7 @@ services:
     expose:
       - 8000
     restart: unless-stopped
+    network_mode: host
 
   nginx:
     container_name: nginx

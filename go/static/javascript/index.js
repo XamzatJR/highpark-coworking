@@ -1,27 +1,33 @@
-let period;
+$("#displayService").click((e) => $("#service").removeClass("hero-disabled"));
 
-$(window).scroll(function () {
-    if ($(document).scrollTop() > 120) {
-        $('.navbar').addClass('navbar-scroll');
-    } else {
-        $('.navbar').removeClass('navbar-scroll');
-    }
+$("#displayDateDaily").click((e) => {
+  $("#date").removeClass("hero-disabled");
+  period = "day";
+  daterangeDay();
 });
 
-$('#displayService').click(function (e) {
-    $('#service').removeClass('hero-disabled');
+$("#displayDateMonthly").click((e) => {
+  $("#date").removeClass("hero-disabled");
+  period = "month";
+  $("#displayTables").removeAttr("style")
+  daterangeMonth();
 });
 
-$('#displayDateDaily').click(function (e) {
-    $('#date').removeClass('hero-disabled');
-    period = $(this).attr('value');
+$("#displayTables").click((e) => {
+  e.preventDefault();
+  $(".alert").remove();
+  if ($("#month").val() == "") {
+    $("#dateForm").append(danger("Выберите количество месяцев"));
+  } else {
+    $("#tables").removeClass("hero-disabled");
+    let date = $('input[name="daterange"]').val().split(".");
+    date = new Date(date[2], date[1] - 1, date[0]);
+    start_g = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+    date.setDate(date.getDate() + (30 * $("#month").val()));
+    end_g = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+    getPlaces()
+    window.location.href = "#tables";
+  }
 });
 
-$('#displayDateMonthly').click(function (e) {
-    $('#date').removeClass('hero-disabled')
-    period = $(this).attr('value')
-})
-
-$('#displayLogin').click(function (e) {
-    $('#login').removeClass('hero-disabled')
-})
+$("#displayLogin").click((e) => $("#loginHero").removeClass("hero-disabled"));

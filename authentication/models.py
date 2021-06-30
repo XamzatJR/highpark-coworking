@@ -12,7 +12,9 @@ class RegisterModel(BaseModel):
     phone: str
     password: str
     date: Optional[DatePlacesModel] = None
-    places: Optional[PlaceModel] = None
+    places: Optional[list[PlaceModel]] = None
+    period: Optional[str] = None
+    price: Optional[int] = None
 
     def exclude_password(self):
         model = self
@@ -33,11 +35,11 @@ class RegisterModel(BaseModel):
             raise ValidationError("Phone number not valid")
         if not re.match(r"(8|7)(\d{3})(\d{7})", phone):
             raise ValidationError("Phone number not valid")
-        return phone
+        return "7" + phone[1:]
 
     @validator("password")
     def password_validator(cls, password: str):
-        if len(password) < 5:
+        if len(password) < 4:
             raise ValidationError("Password is weak")
         return password
 
@@ -53,7 +55,9 @@ class TokenModel(BaseModel):
 
 
 class UserModel(BaseModel):
-    username: str
-    email: Optional[str] = None
-    fullname: Optional[str] = None
-    disabled: Optional[bool] = None
+    fullname: Optional[str]
+    email: Optional[str]
+    phone: Optional[str]
+
+    def only_fullname(self):
+        return UserModel(fullname=self.fullname)
