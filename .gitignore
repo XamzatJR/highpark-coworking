@@ -245,3 +245,4 @@ dist
 .vscode/
 __debug_bin
 *database.db*
+go/__debug_bin.exe

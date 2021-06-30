@@ -1,4 +1,4 @@
-from datetime import timedelta
+from places.utils import get_date_range
 from authentication.utils import AuthJWT
 from authentication.models import UserModel
 from fastapi import APIRouter
@@ -15,9 +15,7 @@ def free_places(date_model: DatePlacesModel, Authorize: AuthJWT = Depends()):
     places: list[Place]
     user_places: list[Place] = []
 
-    days = (date_model.end - date_model.start).days + 2
-    date_model.start -= timedelta(1)
-    date_list = [date_model.start + timedelta(days=x) for x in range(days)]
+    date_list = get_date_range(date_model)
     date_condition = Place.start.in_(date_list) or Place.end.in_(date_list)
     try:
         Authorize.jwt_required()
@@ -81,3 +79,8 @@ def cart_add(place: PlaceModel, Authorize: AuthJWT = Depends()):
     user = Authorize.get_user()
     place = Place.create(user=user, **place.dict())
     return {"in_cart": True}
+
+
+@router.delete("/cart/detele")
+def cart_delete(place: PlaceModel, Authorize: AuthJWT = Depends()):
+    pass

@@ -1,4 +1,6 @@
 from datetime import datetime
+from places.models import PlaceModel
+from places.utils import get_date_range
 
 from fastapi.exceptions import HTTPException
 from setting import settings
@@ -56,11 +58,26 @@ def login(request: Request, user_model: LoginModel, Authorize: AuthJWT = Depends
 def register(
     request: Request, user_model: RegisterModel, background_tasks: BackgroundTasks
 ):
+    def is_occupied(places: list[Place], place: PlaceModel) -> bool:
+        for plc in places:
+            if (plc.place == place.place) and (
+                plc.start == place.start or plc.end == place.end
+            ):
+                return True
+        return False
+
     user_model.password = encrypt_password(user_model.password)
     user = User.create(**user_model.dict())
     background_tasks.add_task(send_activation, request.base_url._url, user)
     if user_model.date and user_model.places:
+        date_list = get_date_range(user_model.date)
+        places = Place.select().where(
+            (Place.paid_for == True)  # noqa: E712
+            & (Place.start.in_(date_list) or Place.end.in_(date_list))
+        )
         for place in user_model.places:
+            if is_occupied(places, place):
+                continue
             Place.create(
                 user=user,
                 place=place.place,
