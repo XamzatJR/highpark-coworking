@@ -18,6 +18,7 @@
     <ul>
       {{if .Authenticated}}
       <li><a href="/logout">Выйти</a></li>
+      <li><a href="/cart" id="cart">Корзина</a></li>
       <li><a href="/profile">Профиль</a></li>
       {{else}}
       <li><a href="/login">Войти</a></li>
@@ -64,9 +65,19 @@
           <hr>
           <h4 id="email">Почтовый адрес: </h4>
           <h4 id="phone">Телефон: </h4>
-          <h4 class="mt-4">Выберите дату</h4>
-          <div class="d-grid gap-5 d-sm-flex justify-content-sm-center mb-4">
-            <input type="text" id="daterange" name="daterange" class="form-control" />
+          <div class="d-grid gap-5 d-sm-flex justify-content-sm-center mt-4 mb-4">
+            <a class="btn btn-primary order-btn" id="displayDateDaily" value="day">Арендовать на день</a>
+            <a class="btn btn-primary order-btn" id="displayDateMonthly" value="month">Арендовать на
+              месяц</a>
+          </div>
+          <div class="col-lg-6 mx-auto" id="dateForm">
+            <div class="d-grid gap-5 d-sm-flex justify-content-sm-center mt-4 mb-4">
+              <input type="text" id="daterange" name="daterange" class="form-control" style="display: none;"/>
+              <input type="number" id="month" name="month" min="1" max="12" class="form-control"
+                placeholder="На сколько месяцев" style="display: none;">
+            </div>
+            <a href="#tables" class="btn btn-primary order-btn mt-4 pt-4" id="displayTables"
+              style="display: none;">Далее</a>
           </div>
           <div class="container">
             <div class="row">
@@ -214,6 +225,7 @@
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script src="/static/javascript/auth.js"></script>
   <script src="/static/javascript/datepicker.js"></script>
+  <script src="/static/javascript/cart.js"></script>
   <script>
     const editModal = new bootstrap.Modal(document.getElementById('editProfile'))
 
@@ -231,6 +243,20 @@
           $("#fullname").text(response.data.fullname)
           editModal.hide()
         })
+    })
+
+    $("#displayDateDaily").click((e) => {
+      period = $("#displayDateDaily").attr("value")
+      $("#month").attr("style", "display: none;")
+      $("input[name='daterange']").removeAttr("style")
+      daterangeDay();
+    })
+
+    $("#displayDateMonthly").click((e) => {
+      period = $("#displayDateMonthly").attr("value")
+      $("input[name='daterange']").removeAttr("style")
+      $("#month").removeAttr("style")
+      daterangeMonth();
     })
 
     $(document).ready(() => {

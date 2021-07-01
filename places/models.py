@@ -11,9 +11,12 @@ class DatePlacesModel(BaseModel):
 
 class PlaceModel(BaseModel):
     place: int
+    price: Optional[int] = None
     start: Optional[date]
     end: Optional[date]
 
     @classmethod
     def orm(cls, model):
-        return cls(place=model.place, start=model.start, end=model.end)
+        return cls(
+            place=model.place, price=model.price, start=model.start, end=model.end
+        )

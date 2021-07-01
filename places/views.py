@@ -78,10 +78,7 @@ def cart_add(place: PlaceModel, Authorize: AuthJWT = Depends()):
     Authorize.jwt_required()
     user = Authorize.get_user()
     date_list = get_date_range(place)
-    places = Place.select().where(
-        (Place.paid_for == True)  # noqa: E712
-        & (Place.start.in_(date_list) or Place.end.in_(date_list))
-    )
+    places = Place.get_places_by_date(date_list)
     if is_occupied(places, place):
         place = Place.create(user=user, **place.dict())
         return {"in_cart": True}

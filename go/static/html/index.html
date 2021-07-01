@@ -16,6 +16,7 @@
     <ul>
       {{if .Authenticated}}
       <li><a href="/logout">Выйти</a></li>
+      <li><a href="/cart" id="cart">Корзина</a></li>
       <li><a href="/profile">Профиль</a></li>
       {{else}}
       <li><a href="/login">Войти</a></li>
@@ -68,9 +69,11 @@
       <div class="col-lg-6 mx-auto" id="dateForm">
         <div class="d-grid gap-5 d-sm-flex justify-content-sm-center" style="padding-top: 12vh;">
           <input type="text" id="daterange" name="daterange" class="form-control" />
-          <input type="number" id="month" name="month" min="1" max="12" class="form-control" placeholder="На сколько месяцев" style="display: none;">
+          <input type="number" id="month" name="month" min="1" max="12" class="form-control"
+            placeholder="На сколько месяцев" style="display: none;">
         </div>
-        <a href="#tables" class="btn btn-primary order-btn mt-4 pt-4" id="displayTables" style="display: none;">Далее</a>
+        <a href="#tables" class="btn btn-primary order-btn mt-4 pt-4" id="displayTables"
+          style="display: none;">Далее</a>
       </div>
     </div>
   </div>
