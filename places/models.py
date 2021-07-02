@@ -15,8 +15,5 @@ class PlaceModel(BaseModel):
     start: Optional[date]
     end: Optional[date]
 
-    @classmethod
-    def orm(cls, model):
-        return cls(
-            place=model.place, price=model.price, start=model.start, end=model.end
-        )
+    class Config:
+        orm_mode = True
