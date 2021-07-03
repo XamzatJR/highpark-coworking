@@ -1,7 +1,7 @@
 from fastapi import HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from fastapi_jwt_auth import AuthJWT as _AuthJWT
-from orm import User
+from orm.models import User
 from passlib.context import CryptContext
 from setting import settings
 
