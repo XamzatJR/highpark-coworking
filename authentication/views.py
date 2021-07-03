@@ -7,7 +7,7 @@ from setting import settings
 from fastapi import APIRouter, BackgroundTasks, Depends, Request, status
 from fastapi.responses import JSONResponse
 from mail import send_activation
-from orm import Place, User
+from orm.models import Place, User
 
 from .models import LoginModel, RegisterModel, TokenModel
 from .utils import check_password, encrypt_password, AuthJWT
@@ -24,12 +24,16 @@ def get_config():
 def token(user_model: LoginModel, Authorize: AuthJWT = Depends()):
     user = User.get_by_email(user_model.email)
 
+    http_auth_error = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Incorrect email or password",
+        headers={"Authenticate": "Bearer"},
+    )
+
     if not user or not check_password(user_model.password, user.password):
-        http_auth_error = HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Incorrect email or password",
-            headers={"Authenticate": "Bearer"},
-        )
+        raise http_auth_error
+    if user.is_active is False:
+        http_auth_error.detail = "User not active"
         raise http_auth_error
 
     access_token = Authorize.create_access_token(
@@ -66,30 +70,39 @@ def register(
     request: Request, user_model: RegisterModel, background_tasks: BackgroundTasks
 ):
     user_model.password = encrypt_password(user_model.password)
-    user = User.create(**user_model.dict())
+
+    try:
+        user = User.create(
+            **user_model.dict(exclude={"date", "places", "period", "price"})
+        )
+    except Exception as err:
+        err_msg = err.orig.pgerror
+        if "users_phone_key" in err_msg:
+            return {"error": "phone"}
+        return {"error": "email"}
 
     background_tasks.add_task(send_activation, request.base_url._url, user)
 
-    if user_model.date and user_model.places:
-        date_list = get_date_range(user_model.date)
-        places = Place.get_places_by_date(date_list)
+    # if user_model.date and user_model.places:
+    #     date_list = get_date_range(user_model.date)
+    #     places = Place.get_places_by_date(date_list)
 
-        for place in user_model.places:
-            if is_occupied(places, place):
-                continue
-            Place.create(
-                user=user,
-                place=place.place,
-                start=user_model.date.start,
-                end=user_model.date.end,
-                price=user_model.price
-                * (
-                    len(date_list)
-                    if user_model.period == "day"
-                    else len(date_list) // 30
-                ),
-            )
-    return user_model.exclude_password()
+    #     for place in user_model.places:
+    #         if is_occupied(places, place):
+    #             continue
+    #         Place.create(
+    #             user=user,
+    #             place=place.place,
+    #             start=user_model.date.start,
+    #             end=user_model.date.end,
+    #             price=user_model.price
+    #             * (
+    #                 len(date_list)
+    #                 if user_model.period == "day"
+    #                 else len(date_list) // 30
+    #             ),
+    #         )
+    return user_model.dict(exclude={"password", "date", "places", "period", "price"})
 
 
 @router.get("/activate")

@@ -1,5 +1,5 @@
 from datetime import date, timedelta
-from orm import Place
+from orm.models import Place
 from places.models import PlaceModel
 
 

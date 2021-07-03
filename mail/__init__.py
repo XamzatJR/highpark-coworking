@@ -1,4 +1,4 @@
-from orm import User
+from orm.models import User
 import pathlib
 
 from fastapi_mail import ConnectionConfig, FastMail, MessageSchema

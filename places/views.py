@@ -3,7 +3,7 @@ from authentication.utils import AuthJWT
 from authentication.models import UserModel
 from fastapi import APIRouter
 from fastapi.params import Depends
-from orm import Place
+from orm.models import Place
 
 from .models import DatePlacesModel, PlaceModel
 

@@ -32,7 +32,7 @@ class User(Base):
 class Place(Base):
     __tablename__ = "places"
 
-    user = Column(Integer, ForeignKey(User.id), primary_key=True)
+    user = Column(Integer, ForeignKey(User.id, ondelete="cascade"), primary_key=True)
     place = Column(Integer)
     date = Column(DATERANGE())
     price = Column(Integer, default=0)

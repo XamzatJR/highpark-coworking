@@ -4,7 +4,7 @@ from fastapi.responses import JSONResponse
 from fastapi_jwt_auth.exceptions import AuthJWTException
 
 from authentication.views import router as authentication
-from orm import create_tables
+from orm.models import create_tables
 from places.views import router as places
 from setting import settings
 

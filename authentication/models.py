@@ -16,11 +16,6 @@ class RegisterModel(BaseModel):
     period: Optional[str] = None
     price: Optional[int] = None
 
-    def exclude_password(self):
-        model = self
-        delattr(model, "password")
-        return model
-
     @validator("email")
     def email_validator(cls, email: str):
         if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
