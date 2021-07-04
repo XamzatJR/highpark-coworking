@@ -1,5 +1,6 @@
 from datetime import date
-from typing import Optional
+from orm.models import Place
+from typing import Optional, Type
 
 from pydantic import BaseModel
 
@@ -17,3 +18,9 @@ class PlaceModel(BaseModel):
 
     class Config:
         orm_mode = True
+
+    @classmethod
+    def from_orm(cls: Type['PlaceModel'], obj: Place) -> 'PlaceModel':
+        setattr(obj, "start", obj.date.lower)
+        setattr(obj, "end", obj.date.upper)
+        return super().from_orm(obj)

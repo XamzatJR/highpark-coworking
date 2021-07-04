@@ -4,6 +4,7 @@ from authentication.models import UserModel
 from fastapi import APIRouter
 from fastapi.params import Depends
 from orm.models import Place
+from psycopg2.extras import DateRange
 
 from .models import DatePlacesModel, PlaceModel
 
@@ -12,33 +13,19 @@ router = APIRouter(tags=["Places"])
 
 @router.post("/free-places")
 def free_places(dm: DatePlacesModel, Authorize: AuthJWT = Depends()):
-    places: list[Place]
-    user_places: list[Place] = []
+    user_places = []
+    daterange = DateRange(dm.start, dm.end)
     try:
         Authorize.jwt_required()
         user = Authorize.get_user().id
     except Exception:
         user = None
     else:
-        user_places = Place.select().where(
-            (Place.user == user) & (Place.end >= dm.start)
-        )
-    places = Place.select().where(
-        (Place.paid_for == True)  # noqa: E712
-        & (Place.user != user)
-        & (Place.end >= dm.start)
-    )
+        user_places = Place.query.filter(~Place.date.in_([daterange]), Place.user == user)
+    places = Place.query.filter(~Place.date.in_([daterange]), Place.paid_for.is_(True), Place.user != user)
     return {
-        "places": [
-            PlaceModel.from_orm(place)
-            for place in places
-            if range_in_range(get_date_range(place), [dm.start, dm.end])
-        ],
-        "user_places": [
-            PlaceModel.from_orm(place)
-            for place in user_places
-            if range_in_range(get_date_range(place), [dm.start, dm.end])
-        ],
+        "places": [PlaceModel.from_orm(obj) for obj in places],
+        "user_places": [PlaceModel.from_orm(obj) for obj in user_places],
     }
 
 

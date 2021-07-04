@@ -43,7 +43,7 @@ def token(user_model: LoginModel, Authorize: AuthJWT = Depends()):
 
 
 @router.post("/login")
-def login(request: Request, user_model: LoginModel, Authorize: AuthJWT = Depends()):
+def login(user_model: LoginModel, Authorize: AuthJWT = Depends()):
     user = User.get_by_email(user_model.email)
 
     http_auth_error = HTTPException(
