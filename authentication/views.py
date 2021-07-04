@@ -83,26 +83,26 @@ def register(
 
     background_tasks.add_task(send_activation, request.base_url._url, user)
 
-    # if user_model.date and user_model.places:
-    #     date_list = get_date_range(user_model.date)
-    #     places = Place.get_places_by_date(date_list)
+    if not user_model.date and not user_model.places:
+        return user_model.dict(exclude={"password", "date", "places", "period", "price"})
 
-    #     for place in user_model.places:
-    #         if is_occupied(places, place):
-    #             continue
-    #         Place.create(
-    #             user=user,
-    #             place=place.place,
-    #             start=user_model.date.start,
-    #             end=user_model.date.end,
-    #             price=user_model.price
-    #             * (
-    #                 len(date_list)
-    #                 if user_model.period == "day"
-    #                 else len(date_list) // 30
-    #             ),
-    #         )
-    return user_model.dict(exclude={"password", "date", "places", "period", "price"})
+    date_list = get_date_range(user_model.date)
+    places = Place.get_places_by_date(date_list)
+    for place in user_model.places:
+        if is_occupied(places, place):
+            continue
+        Place.create(
+            user=user,
+            place=place.place,
+            start=user_model.date.start,
+            end=user_model.date.end,
+            price=user_model.price
+            * (
+                len(date_list)
+                if user_model.period == "day"
+                else len(date_list) // 30
+            ),
+        )
 
 
 @router.get("/activate")
@@ -117,6 +117,7 @@ def activate_user(code: str):
         return JSONResponse({"error": "Сode expired"}, status.HTTP_204_NO_CONTENT)
 
     user.is_active = True
+    user.expires = None
     user.code = None
     user.save()
     return JSONResponse({"message": "User has been activated"}, status.HTTP_200_OK)

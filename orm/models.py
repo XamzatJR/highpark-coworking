@@ -25,8 +25,12 @@ class User(Base):
         return super().create(code=code, expires=expires, **kwargs)
 
     @classmethod
-    def get_by_email(cls, email) -> Union["User", None]:
+    def get_by_email(cls, email: str) -> Union["User", None]:
         return cls.query.filter(cls.email == email).first()
+
+    @classmethod
+    def get_by_code(cls, code: str) -> Union["User", None]:
+        return cls.query.filter(cls.code == code).first()
 
 
 class Place(Base):
