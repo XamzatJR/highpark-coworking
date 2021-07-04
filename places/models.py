@@ -15,6 +15,7 @@ class PlaceModel(BaseModel):
     price: Optional[int] = None
     start: Optional[date]
     end: Optional[date]
+    paid_for: Optional[bool]
 
     class Config:
         orm_mode = True

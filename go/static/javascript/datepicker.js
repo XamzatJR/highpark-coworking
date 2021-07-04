@@ -93,24 +93,23 @@ function getPlaces() {
         el.popover(placePopover("Дата аренды", element.start, element.end));
       });
 
-      response.data.paid_for.forEach((element) => {
+      response.data.user_places.forEach((element) => {
         const el = $(`#${element.place}`);
-        el.removeClass("free").addClass("paid");
-        el.popover(
-          placePopover("Вы арендовали - оплачено", element.start, element.end)
-        );
-      });
-
-      response.data.not_paid_for.forEach((element) => {
-        const el = $(`#${element.place}`);
-        el.removeClass("free").addClass("not-paid");
-        el.popover(
-          placePopover(
-            "Вы арендовали - не оплачено",
-            element.start,
-            element.end
-          )
-        );
+        if (element.paid_for == true) {
+          el.removeClass("free").addClass("paid");
+          el.popover(
+            placePopover("Вы арендовали - оплачено", element.start, element.end)
+          );
+        } else {
+          el.removeClass("free").addClass("not-paid");
+          el.popover(
+            placePopover(
+              "Вы арендовали - не оплачено",
+              element.start,
+              element.end
+            )
+          );
+        }
       });
 
       $("#tables").removeClass("hero-disabled");

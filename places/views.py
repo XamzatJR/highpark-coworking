@@ -1,4 +1,4 @@
-from places.utils import get_date_range, is_occupied, range_in_range
+from places.utils import get_date_range, is_occupied
 from authentication.utils import AuthJWT
 from authentication.models import UserModel
 from fastapi import APIRouter
@@ -21,8 +21,11 @@ def free_places(dm: DatePlacesModel, Authorize: AuthJWT = Depends()):
     except Exception:
         user = None
     else:
-        user_places = Place.query.filter(~Place.date.in_([daterange]), Place.user == user)
-    places = Place.query.filter(~Place.date.in_([daterange]), Place.paid_for.is_(True), Place.user != user)
+        user_places = Place.query.filter(
+            ~Place.date.in_([daterange]), Place.user == user)
+    places = Place.query.filter(
+        ~Place.date.in_([daterange]), Place.paid_for.is_(True), Place.user != user
+    )
     return {
         "places": [PlaceModel.from_orm(obj) for obj in places],
         "user_places": [PlaceModel.from_orm(obj) for obj in user_places],
@@ -58,10 +61,8 @@ def cart(Authorize: AuthJWT = Depends()):
         return {"cart": []}
     else:
         user = Authorize.get_user()
-        query = Place.select().where(
-            (Place.user == user.id) and (Place.paid_for == False)  # noqa: E712
-        )
-        return {"cart": [PlaceModel.orm(place) for place in query]}
+        query = Place.query.filter(Place.user == user.id, Place.paid_for.is_(False))
+        return {"cart": [PlaceModel.from_orm(place) for place in query]}
 
 
 @router.post("/cart/add")
