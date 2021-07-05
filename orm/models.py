@@ -1,9 +1,11 @@
-from datetime import datetime, timedelta
 import random
 import string
+from datetime import datetime, timedelta
 from typing import Union
-from sqlalchemy import Column, String, DateTime, Boolean, ForeignKey, Integer
+
+from sqlalchemy import Boolean, Column, DateTime, ForeignKey, Integer, String
 from sqlalchemy.dialects.postgresql import DATERANGE
+
 from .config import Base, engine
 
 
@@ -38,7 +40,7 @@ class Place(Base):
 
     user = Column(Integer, ForeignKey(User.id, ondelete="cascade"), primary_key=True)
     place = Column(Integer)
-    date = Column(DATERANGE())
+    date = Column(DATERANGE)
     price = Column(Integer, default=0)
     paid_for = Column(Boolean, default=False)
 

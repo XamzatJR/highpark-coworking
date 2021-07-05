@@ -43,3 +43,9 @@ class Base(_Base):
         session.add(self)
         session.commit()
         session.close()
+
+    def delete(self) -> None:
+        session = inspect(self).session
+        session.delete(self)
+        session.commit()
+        session.close()

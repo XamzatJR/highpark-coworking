@@ -22,7 +22,8 @@ def free_places(dm: DatePlacesModel, Authorize: AuthJWT = Depends()):
         user = None
     else:
         user_places = Place.query.filter(
-            ~Place.date.in_([daterange]), Place.user == user)
+            ~Place.date.in_([daterange]), Place.user == user
+        )
     places = Place.query.filter(
         ~Place.date.in_([daterange]), Place.paid_for.is_(True), Place.user != user
     )
@@ -65,7 +66,7 @@ def cart(Authorize: AuthJWT = Depends()):
         return {"cart": [PlaceModel.from_orm(place) for place in query]}
 
 
-@router.post("/cart/add")
+@router.post("/cart")
 def cart_add(place: PlaceModel, Authorize: AuthJWT = Depends()):
     Authorize.jwt_required()
     user = Authorize.get_user()
@@ -77,7 +78,7 @@ def cart_add(place: PlaceModel, Authorize: AuthJWT = Depends()):
     return {"in_cart": False}
 
 
-@router.delete("/cart/detele")
+@router.delete("/cart")
 def cart_delete(place: PlaceModel, Authorize: AuthJWT = Depends()):
     if place.start is None or place.end is None:
         return {"removed": False}

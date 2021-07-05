@@ -21,7 +21,7 @@ class PlaceModel(BaseModel):
         orm_mode = True
 
     @classmethod
-    def from_orm(cls: Type['PlaceModel'], obj: Place) -> 'PlaceModel':
+    def from_orm(cls: Type["PlaceModel"], obj: Place) -> "PlaceModel":
         setattr(obj, "start", obj.date.lower)
         setattr(obj, "end", obj.date.upper)
         return super().from_orm(obj)

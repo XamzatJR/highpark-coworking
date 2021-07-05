@@ -1,7 +1,8 @@
 from datetime import datetime
-from places.utils import get_date_range, is_occupied
+import itertools
 
 from fastapi.exceptions import HTTPException
+from psycopg2.extras import DateRange
 from setting import settings
 
 from fastapi import APIRouter, BackgroundTasks, Depends, Request, status
@@ -83,26 +84,31 @@ def register(
 
     background_tasks.add_task(send_activation, request.base_url._url, user)
 
-    if not user_model.date and not user_model.places:
-        return user_model.dict(exclude={"password", "date", "places", "period", "price"})
+    if not user_model.date or not user_model.places:
+        return user_model.dict(
+            exclude={"password", "date", "places", "period", "price"}
+        )
 
-    date_list = get_date_range(user_model.date)
-    places = Place.get_places_by_date(date_list)
+    daterange = DateRange(user_model.date.start, user_model.date.end)
+    places = Place.query.filter(
+        ~Place.date.in_([daterange]), Place.paid_for.is_(True)
+    ).values(Place.place)
+    if places is None:
+        places = []
+    places = list(itertools.chain(*places))
+    days = (user_model.date.end - user_model.date.start).days
+    if user_model.period == "month":
+        days = days // 30
     for place in user_model.places:
-        if is_occupied(places, place):
+        if place.place in places:
             continue
         Place.create(
-            user=user,
+            user=user.id,
             place=place.place,
-            start=user_model.date.start,
-            end=user_model.date.end,
-            price=user_model.price
-            * (
-                len(date_list)
-                if user_model.period == "day"
-                else len(date_list) // 30
-            ),
+            date=daterange,
+            price=user_model.price * days
         )
+    return user_model.dict(exclude={"password", "date", "places", "period", "price"})
 
 
 @router.get("/activate")
