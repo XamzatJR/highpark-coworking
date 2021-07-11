@@ -290,6 +290,18 @@ extra = ["blinker (>=1.4)"]
 testing = ["pytest", "pytest-asyncio", "pytest-mock", "pytest-cov"]
 
 [[package]]
+name = "fastapi-sqlalchemy"
+version = "0.2.1"
+description = "Adds simple SQLAlchemy support to FastAPI"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[package.dependencies]
+SQLAlchemy = ">=1.2"
+starlette = ">=0.12.9"
+
+[[package]]
 name = "flake8"
 version = "3.9.2"
 description = "the modular source code checker: pep8 pyflakes and co"
@@ -886,7 +898,7 @@ python-versions = ">=3.6.1"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "8c78e7252cd4ec1cbbc16a6075f737c4eda3ad095c6f0e0dc64e7b52de141023"
+content-hash = "5f8d5918b74cafdb2aef5743a621503711e88b34c4079158802ecbd57437893c"
 
 [metadata.files]
 aiofiles = [
@@ -979,6 +991,10 @@ fastapi-jwt-auth = [
 fastapi-mail = [
     {file = "fastapi-mail-0.3.7.tar.gz", hash = "sha256:639d18b9ca8477bab4a8c20fdf2d01672a12761cb2d08dac4a87154cd581e9f6"},
     {file = "fastapi_mail-0.3.7-py3-none-any.whl", hash = "sha256:979eda1f518f2524d6a9ddd4b32b6c4690b56310de89034e7e4832f36a3d4acd"},
+]
+fastapi-sqlalchemy = [
+    {file = "FastAPI-SQLAlchemy-0.2.1.tar.gz", hash = "sha256:7a9d44e46cbc73c3f5ee8c444f7e0bcd3d01370a878740abd4cd4d2e900ce9af"},
+    {file = "FastAPI_SQLAlchemy-0.2.1-py3-none-any.whl", hash = "sha256:d3bfc6d9388a73a2c3726bc6bd7764cd82debfa71c16e3991c544b9701f48d96"},
 ]
 flake8 = [
     {file = "flake8-3.9.2-py2.py3-none-any.whl", hash = "sha256:bf8fd333346d844f616e8d47905ef3a3384edae6b4e9beb0c5101e25e3110907"},

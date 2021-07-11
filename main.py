@@ -2,9 +2,11 @@ from fastapi import FastAPI, Request, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from fastapi_jwt_auth.exceptions import AuthJWTException
+from fastapi_sqlalchemy import DBSessionMiddleware
 
 from authentication.views import router as authentication
 from orm.models import create_tables
+from orm.config import DATABASE_URL
 from places.views import router as places
 from setting import settings
 
@@ -14,6 +16,7 @@ app = FastAPI(
     redoc_url="/redoc" if settings().debug else "",
 )
 
+app.add_middleware(DBSessionMiddleware, db_url=DATABASE_URL)
 
 if settings().debug:
     origins = [

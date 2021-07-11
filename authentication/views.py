@@ -1,17 +1,17 @@
-from datetime import datetime
 import itertools
+from datetime import datetime
 
+from fastapi import APIRouter, BackgroundTasks, Depends, Request, status
 from fastapi.exceptions import HTTPException
+from fastapi.responses import JSONResponse
+from fastapi_sqlalchemy import db
+from mail import send_activation
+from orm.models import Place, User
 from psycopg2.extras import DateRange
 from setting import settings
 
-from fastapi import APIRouter, BackgroundTasks, Depends, Request, status
-from fastapi.responses import JSONResponse
-from mail import send_activation
-from orm.models import Place, User
-
 from .models import LoginModel, RegisterModel, TokenModel
-from .utils import check_password, encrypt_password, AuthJWT
+from .utils import AuthJWT, check_password, encrypt_password
 
 router = APIRouter(prefix="/auth", tags=["Auth"])
 
@@ -82,6 +82,9 @@ def register(
             return {"error": "phone"}
         return {"error": "email"}
 
+    db.session.add(user)
+    db.session.commit()
+
     background_tasks.add_task(send_activation, request.base_url._url, user)
 
     if not user_model.date or not user_model.places:
@@ -90,7 +93,7 @@ def register(
         )
 
     daterange = DateRange(user_model.date.start, user_model.date.end)
-    places = Place.query.filter(
+    places = db.session.query(Place).filter(
         ~Place.date.in_([daterange]), Place.paid_for.is_(True)
     ).values(Place.place)
     if places is None:
@@ -102,12 +105,14 @@ def register(
     for place in user_model.places:
         if place.place in places:
             continue
-        Place.create(
+        place = Place(
             user=user.id,
             place=place.place,
             date=daterange,
             price=user_model.price * days
         )
+        db.session.add(place)
+        db.session.commit()
     return user_model.dict(exclude={"password", "date", "places", "period", "price"})
 
 

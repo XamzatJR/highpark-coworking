@@ -3,6 +3,7 @@ import string
 from datetime import datetime, timedelta
 from typing import Union
 
+from fastapi_sqlalchemy import db
 from sqlalchemy import Boolean, Column, DateTime, ForeignKey, Integer, String
 from sqlalchemy.dialects.postgresql import DATERANGE
 
@@ -24,15 +25,15 @@ class User(Base):
     def create(cls, **kwargs):
         code = "".join(random.choices(string.ascii_letters + string.digits, k=30))
         expires = datetime.now() + timedelta(minutes=10)
-        return super().create(code=code, expires=expires, **kwargs)
+        return cls(code=code, expires=expires, **kwargs)
 
     @classmethod
     def get_by_email(cls, email: str) -> Union["User", None]:
-        return cls.query.filter(cls.email == email).first()
+        return db.session.query(cls).filter(cls.email == email).first()
 
     @classmethod
     def get_by_code(cls, code: str) -> Union["User", None]:
-        return cls.query.filter(cls.code == code).first()
+        return db.session.query(cls).filter(cls.code == code).first()
 
 
 class Place(Base):
