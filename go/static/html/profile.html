@@ -75,9 +75,8 @@
               <input type="text" id="daterange" name="daterange" class="form-control" style="display: none;"/>
               <input type="number" id="month" name="month" min="1" max="12" class="form-control"
                 placeholder="На сколько месяцев" style="display: none;">
+              <button class="btn btn-primary order-btn" style="display: none;" id="onChangeMonth">Найти</button>
             </div>
-            <a href="#tables" class="btn btn-primary order-btn mt-4 pt-4" id="displayTables"
-              style="display: none;">Далее</a>
           </div>
           <div class="container">
             <div class="row">
@@ -229,6 +228,15 @@
   <script>
     const editModal = new bootstrap.Modal(document.getElementById('editProfile'))
 
+    const setDateOnClick = () => {
+      let date = $('input[name="daterange"]').val().split(".");
+      date = new Date(date[2], date[1] - 1, date[0]);
+      start_g = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+      date.setDate(date.getDate() + (30 * $("#month").val()));
+      end_g = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+      getPlaces()
+    }
+
     $("#edit").click((e) => {
       axios.get('/api/profile').then((response) => {
         $("#fullnameFormField").val(response.data.fullname)
@@ -248,6 +256,7 @@
     $("#displayDateDaily").click((e) => {
       period = $("#displayDateDaily").attr("value")
       $("#month").attr("style", "display: none;")
+      $("#onChangeMonth").attr("style", "display: none;")
       $("input[name='daterange']").removeAttr("style")
       daterangeDay();
     })
@@ -255,8 +264,13 @@
     $("#displayDateMonthly").click((e) => {
       period = $("#displayDateMonthly").attr("value")
       $("input[name='daterange']").removeAttr("style")
+      $("#onChangeMonth").removeAttr("style")
       $("#month").removeAttr("style")
       daterangeMonth();
+    })
+
+    $("#onChangeMonth").click(() => {
+      setDateOnClick()
     })
 
     $(document).ready(() => {

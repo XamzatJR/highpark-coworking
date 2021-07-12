@@ -1,10 +1,12 @@
-from places.utils import get_date_range, is_occupied
+from datetime import timedelta
 from authentication.utils import AuthJWT
 from authentication.models import UserModel
 from fastapi import APIRouter
 from fastapi.params import Depends
 from orm.models import Place
+from fastapi_sqlalchemy import db
 from psycopg2.extras import DateRange
+
 
 from .models import DatePlacesModel, PlaceModel
 
@@ -14,18 +16,22 @@ router = APIRouter(tags=["Places"])
 @router.post("/free-places")
 def free_places(dm: DatePlacesModel, Authorize: AuthJWT = Depends()):
     user_places = []
-    daterange = DateRange(dm.start, dm.end)
+
+    if dm.start == dm.end:
+        dm.end += timedelta(1)
+
+    daterange = DateRange(dm.start - timedelta(1), dm.end + timedelta(1))
     try:
         Authorize.jwt_required()
         user = Authorize.get_user().id
     except Exception:
         user = None
     else:
-        user_places = Place.query.filter(
-            ~Place.date.in_([daterange]), Place.user == user
+        user_places = db.session.query(Place).filter(
+            Place.date.overlaps(daterange), Place.user == user
         )
-    places = Place.query.filter(
-        ~Place.date.in_([daterange]), Place.paid_for.is_(True), Place.user != user
+    places = db.session.query(Place).filter(
+        Place.date.overlaps(daterange), Place.paid_for.is_(True), Place.user != user
     )
     return {
         "places": [PlaceModel.from_orm(obj) for obj in places],
@@ -62,19 +68,13 @@ def cart(Authorize: AuthJWT = Depends()):
         return {"cart": []}
     else:
         user = Authorize.get_user()
-        query = Place.query.filter(Place.user == user.id, Place.paid_for.is_(False))
+        query = db.session.query(Place).filter(Place.user == user.id, Place.paid_for.is_(False))
         return {"cart": [PlaceModel.from_orm(place) for place in query]}
 
 
 @router.post("/cart")
 def cart_add(place: PlaceModel, Authorize: AuthJWT = Depends()):
     Authorize.jwt_required()
-    user = Authorize.get_user()
-    date_list = get_date_range(place)
-    places = Place.get_places_by_date(date_list)
-    if is_occupied(places, place):
-        place = Place.create(user=user, **place.dict())
-        return {"in_cart": True}
     return {"in_cart": False}
 
 

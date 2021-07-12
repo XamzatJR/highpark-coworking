@@ -1,5 +1,5 @@
 import itertools
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from fastapi import APIRouter, BackgroundTasks, Depends, Request, status
 from fastapi.exceptions import HTTPException
@@ -92,10 +92,18 @@ def register(
             exclude={"password", "date", "places", "period", "price"}
         )
 
-    daterange = DateRange(user_model.date.start, user_model.date.end)
-    places = db.session.query(Place).filter(
-        ~Place.date.in_([daterange]), Place.paid_for.is_(True)
-    ).values(Place.place)
+    if user_model.date.start == user_model.date.end:
+        user_model.date.end += timedelta(1)
+
+    daterange = DateRange(
+        user_model.date.start - timedelta(1), user_model.date.end + timedelta(1)
+    )
+
+    places = (
+        db.session.query(Place)
+        .filter(~Place.date.in_(daterange), Place.paid_for.is_(True))
+        .values(Place.place)
+    )
     if places is None:
         places = []
     places = list(itertools.chain(*places))
@@ -108,8 +116,8 @@ def register(
         place = Place(
             user=user.id,
             place=place.place,
-            date=daterange,
-            price=user_model.price * days
+            date=DateRange(user_model.date.start, user_model.date.end),
+            price=user_model.price * days,
         )
         db.session.add(place)
         db.session.commit()

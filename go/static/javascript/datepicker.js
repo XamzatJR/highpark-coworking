@@ -56,14 +56,17 @@ const daterangeDay = () => {
 };
 
 const daterangeMonth = () => {
-  let today = new Date();
+  let tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
   $("#month").removeAttr("style");
   $('input[name="daterange"]').daterangepicker({
     singleDatePicker: true,
     autoApply: true,
     locale: locale,
     opens: "left",
-    startDate: today,
+    startDate: tomorrow,
+    endDate: tomorrow,
+    minDate: tomorrow,
   });
 };
 
