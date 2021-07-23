@@ -101,7 +101,7 @@ def register(
 
     places = (
         db.session.query(Place)
-        .filter(~Place.date.in_(daterange), Place.paid_for.is_(True))
+        .filter(Place.date.overlaps(daterange), Place.paid_for.is_(True))
         .values(Place.place)
     )
     if places is None:
@@ -120,7 +120,7 @@ def register(
             price=user_model.price * days,
         )
         db.session.add(place)
-        db.session.commit()
+    db.session.commit()
     return user_model.dict(exclude={"password", "date", "places", "period", "price"})
 
 

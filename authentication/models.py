@@ -16,6 +16,10 @@ class RegisterModel(BaseModel):
     period: Optional[str] = None
     price: Optional[int] = None
 
+    @validator("fullname")
+    def fullname_validator(cls, fullname: str):
+        return fullname.title()
+
     @validator("email")
     def email_validator(cls, email: str):
         if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
