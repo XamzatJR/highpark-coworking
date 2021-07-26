@@ -3,8 +3,7 @@
 
 <head>
   <meta charset="UTF-8" />
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0" crossorigin="anonymous" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
   <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
   <link rel="stylesheet" href="/static/css/style.css" />
@@ -12,22 +11,33 @@
 </head>
 
 <body>
-  <div class="navbar">
-    <ul>
-      {{if .Authenticated}}
-      <li><a href="/logout">Выйти</a></li>
-      <li><a href="/profile">Профиль</a></li>
-      {{else}}
-      <li><a href="/login">Войти</a></li>
-      <li><a href="/register">Регистрация</a></li>
-      {{end}}
-      <li><a href="/contacts">Контакты</a></li>
-      <li><a href="/rules">Правила</a></li>
-      <li><a href="/time">Время работы</a></li>
-      <li><a href="/about">О нас</a></li>
-      <li><a href="/">Главная</a></li>
-    </ul>
-  </div>
+
+  <nav class="navbar navbar-expand-md navbar-light">
+    <div class="container-fluid">
+      <a class="navbar-brand d-md-none" href="/">Highpark Coworking</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse d-md-flex justify-content-md-end" id="navbarNav">
+        <ul class="navbar-nav text-uppercase mt-3">
+          <li class="nav-item mx-xl-4 ms-lg-3"><a href="/" class="nav-link">Главная</a></li>
+          <li class="nav-item mx-xl-4 ms-lg-3"><a href="/about" class="nav-link">О нас</a></li>
+          <li class="nav-item mx-xl-4 ms-lg-3"><a href="/rules" class="nav-link">Правила</a></li>
+          <li class="nav-item mx-xl-4 ms-lg-3"><a href="/time" class="nav-link" class="nav-link">Время работы</a></li>
+          <li class="nav-item mx-xl-4 ms-lg-3"><a href="/contacts" class="nav-link">Контакты</a></li>
+  
+          {{if .Authenticated}}
+          <li class="nav-item mx-xl-4 ms-lg-3"><a href="/logout" class="nav-link">Выйти</a></li>
+          <li class="nav-item mx-xl-4 ms-lg-3"><a href="/profile" class="nav-link">Профиль</a></li>
+          {{else}}
+          <li class="nav-item mx-xl-4 ms-lg-3"><a href="/login" class="nav-link">Войти</a></li>
+          <li class="nav-item mx-xl-4 me-md-5 ms-lg-3 "><a href="/register" class="nav-link">Регистрация</a></li>
+          {{end}}
+        </ul>
+      </div>
+    </div>
+  </nav>
+  
   <div class="hero">
     <div class="container col-xxl-8 px-4 py-5">
       <div class="row flex-lg-row align-items-center g-5 py-5">
@@ -53,7 +63,7 @@
     <div class="px-4 py-5 my-5 text-center">
       <h1 class="display-10 fw-bold lh-1 mb-3">Выберите услугу</h1>
       <div class="col-lg-6 mx-auto">
-        <div class="d-grid gap-5 d-sm-flex justify-content-sm-center" style="padding-top: 12vh;">
+        <div class="d-grid gap-5 d-flex justify-content-center" style="padding-top: 12vh;">
           <a href="#date" class="btn btn-primary order-btn" id="displayDateDaily" value="day">Арендовать на день</a>
           <a href="#date" class="btn btn-primary order-btn" id="displayDateMonthly" value="month">Арендовать на
             месяц</a>
@@ -66,21 +76,21 @@
     <div class="px-4 py-5 my-5 text-center">
       <h1 class="display-10 fw-bold lh-1 mb-3">Выберите дату</h1>
       <div class="col-lg-6 mx-auto" id="dateForm">
-        <div class="d-grid gap-5 d-sm-flex justify-content-sm-center" style="padding-top: 12vh;">
+        <div class="d-grid gap-5 d-flex justify-content-center" style="padding-top: 12vh;">
           <input type="text" id="daterange" name="daterange" class="form-control" />
           <input type="number" id="month" name="month" min="1" max="12" class="form-control" placeholder="На сколько месяцев" style="display: none;">
         </div>
-        <a href="#tables" class="btn btn-primary order-btn mt-4 pt-4" id="displayTables" style="display: none;">Далее</a>
+        <a href="#tables" class="btn btn-primary order-btn mt-4" id="displayTables" style="display: none;">Далее</a>
       </div>
     </div>
   </div>
 
   <div class="hero hero-disabled" id="tables">
     <div class="px-4 py-5 my-5 ">
-      <h1 class="display-10 fw-bold lh-1 mb-3 text-center">Выберите место</h1>
-      <div class="container">
-        <div class="row">
-          <div class="col border border-primary">
+      <h1 class="display-10 fw-bold lh-1 mb-4 text-center">Выберите место</h1>
+      <div>
+        <div class="row justify-content-center">
+          <div class="col border border-primary place">
             <div class="row align-items-start">
               <div class="col">
                 <div class="table-h" style="margin-left:5%;">
@@ -124,7 +134,7 @@
               </div>
             </div>
           </div>
-          <div class="col border border-primary">
+          <div class="col border border-primary place">
             <div class="row mt-5">
               <div class="col">
                 <div class="row">
@@ -166,9 +176,10 @@
               </div>
             </div>
           </div>
-          <div class="col border border-primary">
+          <div class="col border border-primary place">
             <div class="projector" style="float: right; margin-right: 1%; margin-top: 1%;"></div>
             <div class="d-flex justify-content-start mt" style="margin-top: 30%; margin-left: 5%;">
+              <!-- MARGIN-TOP НУЖЕН? -->
               <div class="chair-h2" id="33"></div>
               <div class="chair-h2" id="34"></div>
               <div class="chair-h2" id="35"></div>
@@ -220,22 +231,23 @@
   {{if not .Authenticated}}
   <div class="hero hero-disabled" id="loginHero">
     <div class="px-4 py-5 my-5">
-      <h1 class="display-10 fw-bold lh-1 mb-3 text-center">Регистрация</h1>
+      <!-- <h1 class="display-10 fw-bold lh-1 mb-3 text-center">Регистрация</h1> -->
       <div class="registration-form">
         <form id="register">
-          <div class="form-group">
+          <h1 class="pb-4 text-center">Регистрация</h1>
+          <div class="form-group container">
             <input type="text" class="form-control item" id="username" placeholder="Имя">
           </div>
-          <div class="form-group">
+          <div class="form-group container">
             <input type="text" class="form-control item" id="email" placeholder="Почта">
           </div>
-          <div class="form-group">
+          <div class="form-group container">
             <input type="text" class="form-control item" id="phone-number" placeholder="Номер телефона">
           </div>
-          <div class="form-group">
+          <div class="form-group container">
             <input type="password" class="form-control item" id="password" placeholder="Пароль">
           </div>
-          <div class="form-group">
+          <div class="form-group container">
             <button type="submit" class="btn btn-block create-account">Зарегистрироваться</button>
           </div>
         </form>
@@ -246,11 +258,11 @@
   <footer class="footer mt-auto py-3 footer-custom sticky-bottom">
     <div class="container">
       <div class="row">
-        <div class="col-8">
+        <div class="col-6 col-md-8">
           <p>Иванов Иван</p>
           <p>(с) 2018. Все права защищены.</p>
         </div>
-        <div class="col-4">
+        <div class="col-md-4 col-6">
           <img class="footer-logo" src="/static/svg/vk-logo.svg" alt="" srcset="">
           <img class="footer-logo" src="/static/svg/vk-logo.svg" alt="" srcset="">
           <img class="footer-logo" src="/static/svg/vk-logo.svg" alt="" srcset="">
