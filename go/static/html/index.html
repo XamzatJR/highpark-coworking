@@ -51,7 +51,7 @@
             самом центре города Грозный по адресу пр.Х.А.Исаева дом 100. У нас вы
             найдете самое современное компьютерное оборудование. К вашим услугам
             кухня, переговорные комнаты и копи-центр.</p>
-          <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+          <div class="d-grid gap-2 d-md-flex justify-content-center justify-content-md-start">
             <a href="#service" class="btn btn-primary order-btn" id="displayService">Заказать</a>
           </div>
         </div>
@@ -75,12 +75,14 @@
   <div class="hero hero-disabled" id="date">
     <div class="px-4 py-5 my-5 text-center">
       <h1 class="display-10 fw-bold lh-1 mb-3">Выберите дату</h1>
-      <div class="col-lg-6 mx-auto" id="dateForm">
+      <div class="col-md-6 col-sm-9 mx-auto" id="dateForm">
         <div class="d-grid gap-5 d-flex justify-content-center" style="padding-top: 12vh;">
           <input type="text" id="daterange" name="daterange" class="form-control" />
           <input type="number" id="month" name="month" min="1" max="12" class="form-control" placeholder="На сколько месяцев" style="display: none;">
         </div>
-        <a href="#tables" class="btn btn-primary order-btn mt-4" id="displayTables" style="display: none;">Далее</a>
+        <div class="for-btn">
+          <a href="#tables" class="btn btn-primary order-btn mt-4" id="displayTables" style="display: none;">Далее</a>
+        </div>
       </div>
     </div>
   </div>
@@ -88,8 +90,8 @@
   <div class="hero hero-disabled" id="tables">
     <div class="px-4 py-5 my-5 ">
       <h1 class="display-10 fw-bold lh-1 mb-4 text-center">Выберите место</h1>
-      <div>
-        <div class="row justify-content-center">
+      <div class="container">
+        <div class="row flex-nowrap places">
           <div class="col border border-primary place">
             <div class="row align-items-start">
               <div class="col">

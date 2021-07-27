@@ -62,14 +62,18 @@ body {
   width: 15em;
   height: 4em;
 
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   border: 0ch;
   border-radius: 0%;
 
-  padding-top: 1.3em;
-
   background: #34547a;
+}
+.for-btn {
+  display: flex;
+  justify-content: center;
 }
 
 .order-btn:hover,
@@ -359,9 +363,16 @@ body {
   }
   }
 
-@media (max-width: 535px) {
-  #service .btn {
-    padding-top: 8px;
-  }
+.places {
+  overflow-x: auto;
+  
 }
-
+.places::-webkit-scrollbar {
+  height: 11px;
+  width: 15px;
+  background-color: #34547a;
+}
+.places::-webkit-scrollbar-thumb {
+  background-color: #c4c4c4;
+  border-radius: 3em;
+}
