@@ -29,6 +29,7 @@ if settings().debug:
         allow_headers=["*"],
     )
 else:
+
     @app.middleware("http")
     async def add_process_time_header(request: Request, call_next):
         if request.headers.get("X-Sender") == "golangserver":

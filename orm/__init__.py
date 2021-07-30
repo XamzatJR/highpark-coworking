@@ -1,7 +1,7 @@
 import random
 import string
 import sys
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
 
 from peewee import (
     BooleanField,
@@ -94,6 +94,13 @@ class Place(BaseModel):
     end = DateField()
     price = IntegerField(default=0)
     paid_for = BooleanField(default=False)
+
+    @staticmethod
+    def get_places_by_date(date_list: list[date]) -> list["Place"]:
+        return Place.select().where(
+            (Place.paid_for == True)  # noqa: E712
+            & (Place.start.in_(date_list) or Place.end.in_(date_list))
+        )
 
 
 def create_tables(database: Database = database, base_model: BaseModel = BaseModel):

@@ -1,4 +1,4 @@
-from places.utils import get_date_range, is_occupied
+from places.utils import get_date_range, is_occupied, range_in_range
 from authentication.utils import AuthJWT
 from authentication.models import UserModel
 from fastapi import APIRouter
@@ -11,29 +11,33 @@ router = APIRouter(tags=["Places"])
 
 
 @router.post("/free-places")
-def free_places(date_model: DatePlacesModel, Authorize: AuthJWT = Depends()):
+def free_places(dm: DatePlacesModel, Authorize: AuthJWT = Depends()):
     places: list[Place]
     user_places: list[Place] = []
-
-    date_list = get_date_range(date_model)
-    date_condition = Place.start.in_(date_list) or Place.end.in_(date_list)
     try:
         Authorize.jwt_required()
         user = Authorize.get_user().id
     except Exception:
         user = None
     else:
-        user_places = Place.select().where((Place.user == user) & date_condition)
+        user_places = Place.select().where(
+            (Place.user == user) & (Place.end >= dm.start)
+        )
     places = Place.select().where(
-        (Place.paid_for == True) & (Place.user != user) & date_condition  # noqa: E712
+        (Place.paid_for == True)  # noqa: E712
+        & (Place.user != user)
+        & (Place.end >= dm.start)
     )
     return {
-        "places": [PlaceModel.orm(place) for place in places if date_condition],
-        "paid_for": [
-            PlaceModel.orm(place) for place in user_places if place.paid_for is True
+        "places": [
+            PlaceModel.from_orm(place)
+            for place in places
+            if range_in_range(get_date_range(place), [dm.start, dm.end])
         ],
-        "not_paid_for": [
-            PlaceModel.orm(place) for place in user_places if place.paid_for is False
+        "user_places": [
+            PlaceModel.from_orm(place)
+            for place in user_places
+            if range_in_range(get_date_range(place), [dm.start, dm.end])
         ],
     }
 
@@ -78,10 +82,7 @@ def cart_add(place: PlaceModel, Authorize: AuthJWT = Depends()):
     Authorize.jwt_required()
     user = Authorize.get_user()
     date_list = get_date_range(place)
-    places = Place.select().where(
-        (Place.paid_for == True)  # noqa: E712
-        & (Place.start.in_(date_list) or Place.end.in_(date_list))
-    )
+    places = Place.get_places_by_date(date_list)
     if is_occupied(places, place):
         place = Place.create(user=user, **place.dict())
         return {"in_cart": True}

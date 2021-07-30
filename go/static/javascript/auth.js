@@ -8,15 +8,28 @@ const info = (message) =>
 const danger = (message) =>
   `<div class="alert alert-danger mt-3" role="alert">${message}</div>`;
 
-$(window).scroll(function () {
-  if ($(document).scrollTop() > 120) {
+const badge = (count, text = "") => {
+  return `<span> </span><span class="badge rounded-pill bg-danger">
+          ${count}
+          <span class="visually-hidden">${text}</span>
+      </span>`;
+};
+
+$(() => {
+  axios.get("/api/cart").then((response) => {
+    $("#cart").append(badge(response.data.cart.length, ""));
+  });
+});
+
+$(window).scroll(() => {
+  if ($(document).scrollTop() > 90) {
     $(".navbar").addClass("navbar-scroll");
   } else {
     $(".navbar").removeClass("navbar-scroll");
   }
 });
 
-$("#register").submit(function (e) {
+$("#register").submit((e) => {
   e.preventDefault();
 
   $(".alert").remove();
@@ -26,16 +39,16 @@ $("#register").submit(function (e) {
   const phoneNumber = $("#phone-number").val();
   const password = $("#password").val();
   let places = [];
-  let price = null
+  let price = null;
 
   $(".not-paid").each(function () {
     places.push({ place: this.id });
   });
 
   if (period == "month") {
-    price = 5000
+    price = 5000;
   } else if (period == "day") {
-    price = 300
+    price = 300;
   }
 
   axios
@@ -47,7 +60,7 @@ $("#register").submit(function (e) {
       date: { start: start_g, end: end_g },
       places: places,
       period: period,
-      price: price
+      price: price,
     })
     .then(function (response) {
       $("#register").append(
@@ -73,7 +86,7 @@ $("#register").submit(function (e) {
     });
 });
 
-$("#login").submit(function (e) {
+$("#login").submit((e) => {
   $(".alert").remove();
 
   e.preventDefault();
